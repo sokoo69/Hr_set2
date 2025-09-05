@@ -66,7 +66,13 @@ app.use("/api/v1/corporate-calendar", CorporateCalendarRouter)
 
 app.use("/api/v1/balance", BalanceRouter)
 
-app.listen(process.env.PORT, async () => {
-  await ConnectDB()
-  console.log(`Server running on http://localhost:${process.env.PORT}`)
-})
+// For Vercel deployment
+export default app;
+
+// For local development
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(process.env.PORT || 5000, async () => {
+    await ConnectDB()
+    console.log(`Server running on http://localhost:${process.env.PORT || 5000}`)
+  })
+}
