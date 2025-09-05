@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const apiService = axios.create({
-  baseURL: 'http://localhost:5000',
+  baseURL: 'https://hr-set2-server-phi.vercel.app',
   headers: {
     'Content-Type': 'application/json',
   },
