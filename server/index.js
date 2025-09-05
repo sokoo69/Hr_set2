@@ -29,7 +29,13 @@ app.use(cookieParser())
 
 
 app.use(cors({
-  origin: ["http://localhost:3000", "http://localhost:5173", "http://localhost:5174"], // Support multiple client ports
+  origin: [
+    "http://localhost:3000", 
+    "http://localhost:5173", 
+    "http://localhost:5174",
+    "https://hr-set2-client.vercel.app",
+    "https://hr-set2-client-8wy89r5gg-shawons-projects-2380d384.vercel.app"
+  ], // Support multiple client ports and Vercel domains
   credentials: true, // This is optional and depends on whether you're using cookies
 }));
 // app.options('*', cors())
