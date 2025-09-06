@@ -72,13 +72,27 @@ app.use("/api/v1/corporate-calendar", CorporateCalendarRouter)
 
 app.use("/api/v1/balance", BalanceRouter)
 
+// Health check endpoint
+app.get("/api/health", (req, res) => {
+  res.status(200).json({ 
+    success: true, 
+    message: "Server is running", 
+    timestamp: new Date().toISOString() 
+  });
+});
+
 // For Vercel deployment
 export default app;
 
 // For local development
 if (process.env.NODE_ENV !== 'production') {
   app.listen(process.env.PORT || 5000, async () => {
-    await ConnectDB()
-    console.log(`Server running on http://localhost:${process.env.PORT || 5000}`)
+    try {
+      await ConnectDB()
+      console.log(`Server running on http://localhost:${process.env.PORT || 5000}`)
+    } catch (error) {
+      console.log('Database connection failed, but server is running in mock mode:', error.message)
+      console.log(`Server running on http://localhost:${process.env.PORT || 5000}`)
+    }
   })
 }
