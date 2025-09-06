@@ -15,7 +15,7 @@ import {
     TabsList,
     TabsTrigger,
 } from "@/components/ui/tabs"
-import { Check, ChevronsUpDown } from "lucide-react"
+import { Check, ChevronsUpDown, CheckCircle, Settings, Edit, Trash2 } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import {
@@ -86,8 +86,8 @@ export const HRDepartmentTabs = () => {
         if (HRDepartmentState.success.status) {
             toast({
                 title: <p className="text-xl m-1">Success!</p>,
-                description: <div className="flex justify-center items-center gap-2">
-                    <img src="../../src/assets/HR-Dashboard/correct.png" alt="" className="w-6" />
+                description:                 <div className="flex justify-center items-center gap-2">
+                    <CheckCircle className="w-6 h-6 text-green-600" />
                     <p className="font-bold">{HRDepartmentState.success.message}</p>
                 </div>,
             })
@@ -121,18 +121,18 @@ export const HRDepartmentTabs = () => {
                         <DropdownMenu>
                             <DropdownMenuTrigger>
                                 <Button className="bg-blue-700 hover:bg-blue-900">
-                                    <img src="../../src/assets/HR-Dashboard/settings.png" alt="" className="w-5" />
+                                    <Settings className="w-5 h-5" />
                                     <span className="min-[250px]:hidden sm:flex">Settings</span></Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent className="flex flex-col justify-center items-center p-2">
                                 {/* <DropdownMenuLabel>Update or Delete The Department</DropdownMenuLabel> */}
                                 <div className="buttons flex flex-col gap-2">
                                     <Button className="bg-blue-700 text-white font-bold text-sm hover:bg-blue-900">
-                                        <img src="../../src/assets/HR-Dashboard/update.png" alt="" className="w-5" />
+                                        <Edit className="w-5 h-5" />
                                         Update
                                     </Button>
                                     <Button className="bg-red-700 text-white font-bold text-sm hover:bg-red-900">
-                                        <img src="../../src/assets/HR-Dashboard/delete.png" alt="" className="w-5" />
+                                        <Trash2 className="w-5 h-5" />
                                         Delete
                                     </Button>
                                 </div>
