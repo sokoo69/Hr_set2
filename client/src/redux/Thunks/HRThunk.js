@@ -30,7 +30,7 @@ export const HandlePostHumanResources = createAsyncThunk("HandlePostHumanResourc
         
         // Real API call for signup
         if (apiroute === "SIGNUP") {
-            const response = await apiService.post('/api/auth/HR/signup', data, {
+            const response = await apiService.post('/api/signup', data, {
                 withCredentials: true
             });
             return response.data;
@@ -38,7 +38,7 @@ export const HandlePostHumanResources = createAsyncThunk("HandlePostHumanResourc
         
         // Real API call for login
         if (apiroute === "LOGIN") {
-            const response = await apiService.post('/api/auth/HR/login', data, {
+            const response = await apiService.post('/api/login', data, {
                 withCredentials: true
             });
             return response.data;
