@@ -6,69 +6,12 @@ export const HandleGetHREmployees = createAsyncThunk('HandleGetHREmployees', asy
     try {
         const { apiroute } = HREmployeeData
         
-        // Mock data for HR employees
+        // Real API call for HR employees
         if (apiroute === "GETALL") {
-            return {
-                success: true,
-                message: "Employees fetched successfully",
-                data: [
-                    {
-                        _id: "emp1",
-                        firstname: "John",
-                        lastname: "Doe",
-                        email: "john.doe@company.com",
-                        contactnumber: "123-456-7890",
-                        department: { name: "Information Technology" },
-                        position: "Software Developer",
-                        joinDate: "2023-01-15",
-                        status: "Active"
-                    },
-                    {
-                        _id: "emp2",
-                        firstname: "Jane",
-                        lastname: "Smith",
-                        email: "jane.smith@company.com",
-                        contactnumber: "123-456-7891",
-                        department: { name: "Human Resources" },
-                        position: "HR Specialist",
-                        joinDate: "2023-02-20",
-                        status: "Active"
-                    },
-                    {
-                        _id: "emp3",
-                        firstname: "Mike",
-                        lastname: "Johnson",
-                        email: "mike.johnson@company.com",
-                        contactnumber: "123-456-7892",
-                        department: { name: "Finance" },
-                        position: "Financial Analyst",
-                        joinDate: "2023-03-10",
-                        status: "Active"
-                    },
-                    {
-                        _id: "emp4",
-                        firstname: "Sarah",
-                        lastname: "Wilson",
-                        email: "sarah.wilson@company.com",
-                        contactnumber: "123-456-7893",
-                        department: { name: "Marketing" },
-                        position: "Marketing Manager",
-                        joinDate: "2023-04-05",
-                        status: "Active"
-                    },
-                    {
-                        _id: "emp5",
-                        firstname: "David",
-                        lastname: "Brown",
-                        email: "david.brown@company.com",
-                        contactnumber: "123-456-7894",
-                        department: { name: "Operations" },
-                        position: "Operations Manager",
-                        joinDate: "2023-05-12",
-                        status: "Active"
-                    }
-                ]
-            };
+            const response = await apiService.get(`${HREmployeesPageEndPoints[apiroute]}`, { 
+                withCredentials: true
+            });
+            return response.data;
         }
         
         const response = await apiService.get(`${HREmployeesPageEndPoints[apiroute]}`, {

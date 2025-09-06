@@ -73,7 +73,7 @@ export const HandlePostHumanResources = createAsyncThunk("HandlePostHumanResourc
         
         // Real API call for login
         if (apiroute === "LOGIN") {
-            const response = await apiService.post('/api/login', data, {
+            const response = await apiService.post(`${HREndPoints[apiroute]}`, data, {
                 withCredentials: true
             });
             return response.data;
