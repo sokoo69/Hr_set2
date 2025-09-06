@@ -24,6 +24,7 @@ export default async function handler(req, res) {
           success: true,
           message: 'Login successful',
           token: 'mock-jwt-token-12345',
+          type: 'HRLogin',
           user: {
             email: email,
             role: 'HR'
