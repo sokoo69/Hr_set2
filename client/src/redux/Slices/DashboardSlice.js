@@ -5,7 +5,14 @@ import { HandleGetDashboard } from "../Thunks/DashboardThunk";
 const HRDashboardSlice = createSlice({
     name: "HRDashboard",
     initialState: {
-        data: null,
+        data: {
+            employees: 0,
+            departments: 0,
+            leaves: 0,
+            requestes: 0,
+            balance: [],
+            notices: []
+        },
         isLoading: false,
         success : false, 
         error: {

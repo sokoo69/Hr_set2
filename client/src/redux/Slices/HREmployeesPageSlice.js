@@ -5,7 +5,7 @@ import { HandleDeleteHREmployees, HandlePostHREmployees, HandleGetHREmployees } 
 const HREmployeesSlice = createSlice({
     name: "HREmployees",
     initialState: {
-        data: null, 
+        data: [], 
         isLoading: false,
         success: false,
         fetchData : false, 

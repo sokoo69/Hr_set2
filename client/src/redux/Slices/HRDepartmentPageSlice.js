@@ -5,7 +5,7 @@ import { HRDepartmentPageAsyncReducer } from "../AsyncReducers/asyncreducer";
 const HRDepartmentPageSlice = createSlice({
     name: "HRDepartmentPage",
     initialState: {
-        data: null,
+        data: [],
         isLoading: false,
         fetchData: false,
         success: {
