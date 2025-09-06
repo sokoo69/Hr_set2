@@ -6,6 +6,7 @@ import { HandleGetEmployeeDashboard } from "../../../redux/Thunks/EmployeeDashbo
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { Loading } from "../../../components/common/loading.jsx"
+import { User, Calendar, FileText, DollarSign } from "lucide-react"
 
 export const EmployeeDashboardPage = () => {
     console.log("Employee Dashboard Reloaded")
@@ -13,24 +14,28 @@ export const EmployeeDashboardPage = () => {
     const dispatch = useDispatch()
     const DataArray = [
         {
-            image: "/HR-Dashboard/employee-2.png",
+            icon: User,
             dataname: "profile",
-            path: "/auth/employee/employee-dashboard/profile"
+            path: "/auth/employee/employee-dashboard/profile",
+            color: "blue"
         },
         {
-            image: "/HR-Dashboard/leave.png",
+            icon: Calendar,
             dataname: "leaves",
             path: "/auth/employee/employee-dashboard/leaves",
+            color: "green"
         },
         {
-            image: "/HR-Dashboard/request.png",
+            icon: FileText,
             dataname: "requests",
-            path: "/auth/employee/employee-dashboard/requests"
+            path: "/auth/employee/employee-dashboard/requests",
+            color: "purple"
         },
         {
-            image: "/HR-Dashboard/department.png",
+            icon: DollarSign,
             dataname: "salary",
-            path: "/auth/employee/employee-dashboard/salary"
+            path: "/auth/employee/employee-dashboard/salary",
+            color: "yellow"
         }
     ]
 

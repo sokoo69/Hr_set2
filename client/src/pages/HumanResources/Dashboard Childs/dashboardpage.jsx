@@ -6,30 +6,35 @@ import { HandleGetDashboard } from "../../../redux/Thunks/DashboardThunk.js"
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { Loading } from "../../../components/common/loading.jsx"
+import { Users, Building2, Calendar, FileText } from "lucide-react"
 export const HRDashboardPage = () => {
     console.log("Reloaded")
     const DashboardState = useSelector((state) => state.dashboardreducer)
     const dispatch = useDispatch()
     const DataArray = [
         {
-            image: "/HR-Dashboard/employee-2.png",
+            icon: Users,
             dataname: "employees",
-            path: "/HR/dashboard/employees"
+            path: "/HR/dashboard/employees",
+            color: "blue"
         },
         {
-            image: "/HR-Dashboard/department.png",
+            icon: Building2,
             dataname: "departments",
             path: "/HR/dashboard/departments",
+            color: "green"
         },
         {
-            image: "/HR-Dashboard/leave.png",
+            icon: Calendar,
             dataname: "leaves",
-            path: "/HR/dashboard/leaves"
+            path: "/HR/dashboard/leaves",
+            color: "purple"
         },
         {
-            image: "/HR-Dashboard/request.png",
+            icon: FileText,
             dataname: "requestes",
-            path: "/HR/dashboard/requestes"
+            path: "/HR/dashboard/requestes",
+            color: "orange"
         }
     ]
 

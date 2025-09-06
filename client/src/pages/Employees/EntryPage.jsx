@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { Link } from "react-router-dom"
+import { Building2, Users } from "lucide-react"
 
 export const EntryPage = () => {
     return (
@@ -7,11 +8,9 @@ export const EntryPage = () => {
             <div className="max-w-4xl w-full">
                 <div className="text-center mb-12">
                     <div className="mb-8">
-                        <img 
-                            src="/welcome.png" 
-                            alt="Welcome to HR Management System" 
-                            className="mx-auto w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 object-contain drop-shadow-lg" 
-                        />
+                        <div className="mx-auto w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-2xl">
+                            <Building2 className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 text-white" />
+                        </div>
                     </div>
                     <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-800 mb-4 leading-tight">
                         Welcome to 
@@ -26,17 +25,13 @@ export const EntryPage = () => {
                 <div className="flex flex-col sm:flex-row justify-center items-center gap-6 max-w-2xl mx-auto">
                     <Link to={"/auth/employee/login"} className="w-full sm:w-auto">
                         <Button className="w-full sm:w-48 h-16 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold text-lg rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 flex items-center justify-center gap-3">
-                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                            </svg>
+                            <Users className="w-6 h-6" />
                             Employee
                         </Button>
                     </Link>
                     <Link to={"/auth/HR/signup"} className="w-full sm:w-auto">
                         <Button className="w-full sm:w-48 h-16 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-bold text-lg rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 flex items-center justify-center gap-3">
-                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                            </svg>
+                            <Building2 className="w-6 h-6" />
                             HR Admin
                         </Button>
                     </Link>

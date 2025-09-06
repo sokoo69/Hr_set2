@@ -15,9 +15,10 @@ export const KeyDetailBoxContentWrapper = ({ imagedataarray, data }) => {
             {imagedataarray.map((item, index) => (
                 <Link key={index} to={item.path} className="block">
                     <KeyDetailsBox 
-                        image={item.image} 
+                        icon={item.icon} 
                         dataname={item.dataname} 
                         data={data ? data[item["dataname"]] : "0"}
+                        color={item.color}
                     />
                 </Link>
             ))}

@@ -1,7 +1,7 @@
 import { ErrorPopup } from "./error-popup"
 import { Link } from "react-router-dom"
 import { useState } from "react"
-import { Eye, EyeOff, Mail, Lock, ArrowRight, Sparkles } from "lucide-react"
+import { Eye, EyeOff, Mail, Lock, ArrowRight, Sparkles, Building2 } from "lucide-react"
 
 export const SignIn = ({ image, handlesigninform, handlesigninsubmit, targetedstate, statevalue, redirectpath, formId = "signin-form" }) => {
     const [showPassword, setShowPassword] = useState(false)
@@ -31,11 +31,9 @@ export const SignIn = ({ image, handlesigninform, handlesigninsubmit, targetedst
                                         <h1 className="text-3xl lg:text-4xl font-bold mb-2">Welcome Back!</h1>
                                         <p className="text-blue-100 text-lg">Sign in to continue your journey</p>
                                     </div>
-                                    <img
-                                        alt="Company Logo"
-                                        src={image}
-                                        className="mx-auto h-48 w-auto object-contain rounded-2xl shadow-lg"
-                                    />
+                                    <div className="mx-auto h-48 w-48 bg-white/20 rounded-2xl shadow-lg flex items-center justify-center backdrop-blur-sm">
+                                        <Building2 className="h-24 w-24 text-white" />
+                                    </div>
                                 </div>
                                 {/* Decorative elements */}
                                 <div className="absolute top-10 left-10 w-20 h-20 bg-white/10 rounded-full blur-xl"></div>
