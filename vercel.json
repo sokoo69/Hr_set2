@@ -18,11 +18,7 @@
   ],
   "routes": [
     {
-      "src": "/api/auth/(.*)",
-      "dest": "/api/$1"
-    },
-    {
-      "src": "/api/(.*)",
+      "src": "/api/(?!auth/)(.*)",
       "dest": "/server/index.js"
     },
     {
