@@ -6,9 +6,9 @@ export const APIsEndPoints = {
 }
 
 export const HREndPoints = {
-    SIGNUP: "/api/auth/HR/signup",
+    SIGNUP: "/api/signup",
     CHECKLOGIN: "/api/auth/HR/check-login",
-    LOGIN: "/api/auth/HR/login",
+    LOGIN: "/api/login",
     VERIFY_EMAIL: "/api/auth/HR/verify-email",
     CHECK_VERIFY_EMAIL: "/api/auth/HR/check-verify-email",
     RESEND_VERIFY_EMAIL: "/api/auth/HR/resend-verify-email",

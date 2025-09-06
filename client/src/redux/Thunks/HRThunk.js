@@ -50,12 +50,12 @@ export const HandlePostHumanResources = createAsyncThunk("HandlePostHumanResourc
             })
             return response.data
         }
-        else {
-            const response = await apiService.post(`${HREndPoints[apiroute]}`, data, {
-                withCredentials: true
-            })
-            return response.data 
-        }
+        
+        // For any other HR API calls, use the endpoints
+        const response = await apiService.post(`${HREndPoints[apiroute]}`, data, {
+            withCredentials: true
+        })
+        return response.data
     } catch (error) {
         console.log('HR Post Error:', error);
         if (error.response && error.response.data) {
