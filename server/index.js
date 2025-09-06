@@ -1,6 +1,8 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import dotenv from 'dotenv'
+import path from 'path';
+import { fileURLToPath } from 'url';
 import EmployeeAuthRouter from './routes/EmployeeAuth.route.js'
 import HRAuthrouter from './routes/HRAuth.route.js'
 import DashboardRouter from './routes/Dashbaord.route.js'
@@ -24,8 +26,16 @@ import cors from "cors"
 
 dotenv.config()
 const app = express();
+
+// ES module __dirname equivalent
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 app.use(bodyParser.json())
 app.use(cookieParser())
+
+// Serve static files from the React app build directory
+app.use(express.static(path.join(__dirname, '../client/dist')));
 
 
 app.use(cors({
@@ -81,18 +91,23 @@ app.get("/api/health", (req, res) => {
   });
 });
 
+// Catch all handler: send back React's index.html file for any non-API routes
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/dist/index.html'));
+});
+
 // For Vercel deployment
 export default app;
 
-// For local development
-if (process.env.NODE_ENV !== 'production') {
-  app.listen(process.env.PORT || 5000, async () => {
-    try {
-      await ConnectDB()
-      console.log(`Server running on http://localhost:${process.env.PORT || 5000}`)
-    } catch (error) {
-      console.log('Database connection failed, but server is running in mock mode:', error.message)
-      console.log(`Server running on http://localhost:${process.env.PORT || 5000}`)
-    }
-  })
-}
+// For Heroku deployment
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, async () => {
+  try {
+    await ConnectDB()
+    console.log(`Server running on port ${PORT}`)
+  } catch (error) {
+    console.log('Database connection failed, but server is running in mock mode:', error.message)
+    console.log(`Server running on port ${PORT}`)
+  }
+})

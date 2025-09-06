@@ -1,0 +1,37 @@
+{
+  "name": "HR Management System",
+  "description": "Full-stack HR management system with React frontend and Node.js backend",
+  "repository": "https://github.com/sokoo69/Hr_set2",
+  "logo": "https://node-js-sample.herokuapp.com/node.png",
+  "keywords": ["node", "express", "react", "hr", "management"],
+  "image": "heroku/nodejs",
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    }
+  ],
+  "env": {
+    "NODE_ENV": {
+      "description": "Environment",
+      "value": "production"
+    },
+    "MONGODB_URI": {
+      "description": "MongoDB connection string",
+      "value": "mongodb+srv://saykotbiswascse_db_user:oOd2yXkzsV2lr2ty@employeemanagementsyste.wauhuiz.mongodb.net/employeemanagementsystem?retryWrites=true&w=majority"
+    },
+    "JWT_SECRET": {
+      "description": "JWT secret key",
+      "value": "your_jwt_secret_key_here"
+    },
+    "JWT_EXPIRE": {
+      "description": "JWT expiration time",
+      "value": "7d"
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "free"
+    }
+  }
+}

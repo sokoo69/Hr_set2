@@ -1,24 +1,25 @@
 {
   "name": "hr-management-system",
   "version": "1.0.0",
-  "description": "HR Management System with React frontend and Node.js backend",
-  "private": true,
-  "workspaces": [
-    "client",
-    "server"
-  ],
+  "description": "Full-stack HR management system",
+  "main": "server/index.js",
   "scripts": {
-    "dev": "concurrently \"npm run dev:client\" \"npm run dev:server\"",
-    "dev:client": "cd client && npm run dev",
-    "dev:server": "cd server && npm run server",
-    "build": "cd client && npm run build",
     "start": "cd server && npm start",
-    "install:all": "npm install && cd client && npm install && cd ../server && npm install"
-  },
-  "devDependencies": {
-    "concurrently": "^8.2.2"
+    "build": "cd client && npm run build",
+    "install-client": "cd client && npm install",
+    "install-server": "cd server && npm install",
+    "install-all": "npm run install-client && npm run install-server",
+    "heroku-postbuild": "npm run install-all && npm run build"
   },
   "engines": {
-    "node": ">=18.0.0"
-  }
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sokoo69/Hr_set2.git"
+  },
+  "keywords": ["hr", "management", "react", "nodejs", "express"],
+  "author": "Shawon Saykot",
+  "license": "MIT"
 }
