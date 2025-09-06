@@ -175,19 +175,19 @@ export const EmployeeDetailsDialogBox = ({ EmployeeID }) => {
                             <div className="details-group-1 flex flex-col gap-3">
                                 <div className="label-value-pair flex items-center gap-2">
                                     <label className="font-bold md:text-sm xl:text-lg">Notices :</label>
-                                    <p className="md:text-sm xl:text-lg">{employeeData.notice.length}</p>
+                                    <p className="md:text-sm xl:text-lg">{employeeData.notice?.length || 0}</p>
                                 </div>
                                 <div className="label-value-pair flex items-center gap-2">
                                     <label className="font-bold md:text-sm xl:text-lg">Salary Records :</label>
-                                    <p className="md:text-sm xl:text-lg">{employeeData.salary.length}</p>
+                                    <p className="md:text-sm xl:text-lg">{employeeData.salary?.length || 0}</p>
                                 </div>
                                 <div className="label-value-pair flex items-center gap-2">
                                     <label className="font-bold md:text-sm xl:text-lg">Leave Requests :</label>
-                                    <p className="md:text-sm xl:text-lg">{employeeData.leaverequest.length}</p>
+                                    <p className="md:text-sm xl:text-lg">{employeeData.leaverequest?.length || 0}</p>
                                 </div>
                                 <div className="label-value-pair flex items-center gap-2">
                                     <label className="font-bold md:text-sm xl:text-lg">Requests :</label>
-                                    <p className="md:text-sm xl:text-lg">{employeeData.generaterequest.length}</p>
+                                    <p className="md:text-sm xl:text-lg">{employeeData.generaterequest?.length || 0}</p>
                                 </div>
                                 <div className="label-value-pair flex items-center gap-2">
                                     <label className="font-bold md:text-sm xl:text-lg">Email Verify :</label>
