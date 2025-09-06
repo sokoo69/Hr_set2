@@ -186,12 +186,9 @@ export const SignUP = ({ handlesignupform, handlesubmitform, stateformdata, erro
 
                         <div className="buttons w-full flex justify-between">
                             <Button 
-                                className="min-[250px]:text-xs min-[250px]:px-2 min-[250px]:py-1 sm:px-4 sm:py-2 sm:text-sm md:text-md  px-4 py-2 bg-purple-700 border-2 border-purple-700 text-white font-bold rounded-lg hover:bg-white hover:text-purple-700 hover:cursor-pointer" 
-                                onClick={(e) => {
-                                    console.log("Sign Up button clicked!");
-                                    console.log("Form data:", stateformdata);
-                                    handlesubmitform(e);
-                                }}
+                                type="button"
+                                className="min-[250px]:text-xs min-[250px]:px-2 min-[250px]:py-1 sm:px-4 sm:py-2 sm:text-sm md:text-md px-4 py-2 bg-purple-700 border-2 border-purple-700 text-white font-bold rounded-lg hover:bg-white hover:text-purple-700 hover:cursor-pointer transition-all duration-200" 
+                                onClick={handlesubmitform}
                             >
                                 Sign Up
                             </Button>
