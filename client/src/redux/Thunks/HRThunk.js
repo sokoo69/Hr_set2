@@ -11,7 +11,15 @@ export const HandleGetHumanResources = createAsyncThunk("HandleGetHumanResources
         return response.data;
     }
     catch (error) {
-        return rejectWithValue(error.response.data);
+        console.log('HR Get Error:', error);
+        if (error.response && error.response.data) {
+            return rejectWithValue(error.response.data);
+        } else {
+            return rejectWithValue({
+                success: false,
+                message: error.message || 'Network error occurred'
+            });
+        }
     }
 })
 
@@ -32,7 +40,15 @@ export const HandlePostHumanResources = createAsyncThunk("HandlePostHumanResourc
             return response.data 
         }
     } catch (error) {
-        return rejectWithValue(error.response.data);
+        console.log('HR Login Error:', error);
+        if (error.response && error.response.data) {
+            return rejectWithValue(error.response.data);
+        } else {
+            return rejectWithValue({
+                success: false,
+                message: error.message || 'Network error occurred'
+            });
+        }
     }
 })
 
