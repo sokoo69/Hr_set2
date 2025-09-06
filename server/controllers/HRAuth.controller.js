@@ -109,22 +109,29 @@ export const HandleHRVerifyEmail = async (req, res) => {
 export const HandleHRLogin = async (req, res) => {
     const { email, password } = req.body
     try {
-        const HR = await HumanResources.findOne({ email: email })
-
-        if (!HR) {
+        // Mock authentication for testing without database
+        if (email === 'Shawon.saykot2023@gmail.com' && password === 'Shawon.saykot2023') {
+            // Set a mock JWT token cookie
+            res.cookie('HRtoken', 'mock-jwt-token-12345', {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: 'lax',
+                maxAge: 24 * 60 * 60 * 1000 // 24 hours
+            });
+            
+            return res.status(200).json({ 
+                success: true, 
+                message: "HR Login Successfull", 
+                type: "HRLogin",
+                token: 'mock-jwt-token-12345',
+                user: {
+                    email: email,
+                    role: 'HR-Admin'
+                }
+            })
+        } else {
             return res.status(400).json({ success: false, message: "Invaild Credentials, Please Add Correct One", type: "HRLogin" })
         }
-
-        const isMatch = await bcrypt.compare(password, HR.password)
-
-        if (!isMatch) {
-            return res.status(400).json({ success: false, message: "Invaild Credentials, Please Add Correct One", type: "HRLogin" })
-        }
-
-        GenerateJwtTokenAndSetCookiesHR(res, HR._id, HR.role, HR.organizationID)
-        HR.lastlogin = new Date()
-        await HR.save()
-        return res.status(200).json({ success: true, message: "HR Login Successfull", type: "HRLogin" })
     }
     catch (error) {
         return res.status(500).json({ success: false, message: "Internal Server Error", error: error, type: "HRLogin" })
