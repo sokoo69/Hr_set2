@@ -335,7 +335,6 @@ export const SignUP = ({ handlesignupform, handlesubmitform, stateformdata, erro
                     </div>
                 </div>
             </div>
-
         </>
     )
 }
