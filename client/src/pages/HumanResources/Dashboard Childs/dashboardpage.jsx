@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { Loading } from "../../../components/common/loading.jsx"
 import { Users, Building2, Calendar, FileText } from "lucide-react"
+import { ButtonTest } from "../../../components/common/ButtonTest.jsx"
 export const HRDashboardPage = () => {
     console.log("Reloaded")
     const DashboardState = useSelector((state) => state.dashboardreducer)
@@ -56,6 +57,13 @@ export const HRDashboardPage = () => {
                 <p className="text-gray-600">Welcome to your HR management dashboard</p>
             </div>
             <KeyDetailBoxContentWrapper imagedataarray={DataArray} data={DashboardState.data} />
+            
+            {/* Navigation Test Section */}
+            <div className="mt-8 p-6 bg-white rounded-xl shadow-sm border border-gray-200">
+                <h2 className="text-xl font-semibold text-gray-800 mb-4">Quick Navigation Test</h2>
+                <p className="text-gray-600 mb-4">Click any button below to test navigation to different sections:</p>
+                <ButtonTest />
+            </div>
             <div className="salary-notices-container h-3/4 grid min-[250px]:grid-cols-1 lg:grid-cols-2 min-[250px]:gap-3 xl:gap-3">
                 <SalaryChart balancedata={DashboardState.data} />
                 <DataTable noticedata={DashboardState.data} />

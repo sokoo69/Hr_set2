@@ -19,6 +19,6 @@ export const HRProtectedRoutes = ({ children }) => {
     }
 
     return (
-        (HRState.isAuthenticated && HRState.isAuthourized) ? children : null
+        (HRState.isAuthenticated && HRState.isAuthourized) ? children : <Navigate to="/" />
     )
 }
