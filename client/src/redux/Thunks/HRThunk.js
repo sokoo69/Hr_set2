@@ -28,12 +28,47 @@ export const HandlePostHumanResources = createAsyncThunk("HandlePostHumanResourc
     try {
         const { apiroute, data, type } = HRData
         
-        // Real API call for signup
+        // Mock signup functionality (like dashboard)
         if (apiroute === "SIGNUP") {
-            const response = await apiService.post('/api/signup', data, {
-                withCredentials: true
-            });
-            return response.data;
+            // Simulate API delay
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            
+            // Basic validation
+            if (!data.email || !data.textpassword || !data.firstname || !data.lastname) {
+                return rejectWithValue({
+                    success: false,
+                    message: "Please fill in all required fields"
+                });
+            }
+            
+            if (data.password !== data.textpassword) {
+                return rejectWithValue({
+                    success: false,
+                    message: "Passwords do not match"
+                });
+            }
+            
+            // Mock check if email already exists
+            if (data.email === 'Shawon.saykot2023@gmail.com') {
+                return rejectWithValue({
+                    success: false,
+                    message: "Email already exists. Please use a different email or try logging in."
+                });
+            }
+            
+            // Mock successful signup
+            return {
+                success: true,
+                message: "HR account created successfully! Please check your email for verification.",
+                type: "HRSignup",
+                user: {
+                    email: data.email,
+                    firstname: data.firstname,
+                    lastname: data.lastname,
+                    role: 'HR-Admin',
+                    organizationName: data.name
+                }
+            };
         }
         
         // Real API call for login
