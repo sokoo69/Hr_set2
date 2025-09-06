@@ -7,24 +7,9 @@
       "config": {
         "distDir": "dist"
       }
-    },
-    {
-      "src": "server/index.js",
-      "use": "@vercel/node",
-      "config": {
-        "maxDuration": 30
-      }
     }
   ],
   "routes": [
-    {
-      "src": "/api/auth/(.*)",
-      "dest": "/api/$1"
-    },
-    {
-      "src": "/api/(.*)",
-      "dest": "/server/index.js"
-    },
     {
       "src": "/(.*)",
       "dest": "/client/dist/$1"
