@@ -20,52 +20,40 @@ export default function handler(req, res) {
 
     const { firstname, lastname, email, contactnumber, password, textpassword, name, description, OrganizationURL, OrganizationMail } = req.body;
 
-    try {
-        // Simulate API delay
-        await new Promise(resolve => setTimeout(resolve, 1500));
-
-        // Basic validation
-        if (!email || !password || !firstname || !lastname || !contactnumber || !name || !description || !OrganizationURL || !OrganizationMail) {
-            return res.status(400).json({ 
-                success: false, 
-                message: "Please fill in all required fields" 
-            });
-        }
-
-        if (password !== textpassword) {
-            return res.status(400).json({ 
-                success: false, 
-                message: "Passwords do not match" 
-            });
-        }
-
-        // Mock check if email already exists
-        if (email === 'Shawon.saykot2023@gmail.com') {
-            return res.status(409).json({ 
-                success: false, 
-                message: "Email already exists. Please use a different email or try logging in." 
-            });
-        }
-
-        // Mock successful signup
-        return res.status(200).json({
-            success: true,
-            message: "HR account created successfully! Please check your email for verification.",
-            type: "HRSignup",
-            user: {
-                email: email,
-                firstname: firstname,
-                lastname: lastname,
-                role: 'HR-Admin',
-                organizationName: name
-            }
-        });
-
-    } catch (error) {
-        console.error('HR Signup API Error:', error);
-        return res.status(500).json({ 
+    // Basic validation
+    if (!email || !password || !firstname || !lastname || !contactnumber || !name || !description || !OrganizationURL || !OrganizationMail) {
+        return res.status(400).json({ 
             success: false, 
-            message: error.message || 'Internal Server Error' 
+            message: "Please fill in all required fields" 
         });
     }
+
+    if (password !== textpassword) {
+        return res.status(400).json({ 
+            success: false, 
+            message: "Passwords do not match" 
+        });
+    }
+
+    // Mock check if email already exists
+    if (email === 'Shawon.saykot2023@gmail.com') {
+        return res.status(409).json({ 
+            success: false, 
+            message: "Email already exists. Please use a different email or try logging in." 
+        });
+    }
+
+    // Mock successful signup
+    return res.status(200).json({
+        success: true,
+        message: "HR account created successfully! Please check your email for verification.",
+        type: "HRSignup",
+        user: {
+            email: email,
+            firstname: firstname,
+            lastname: lastname,
+            role: 'HR-Admin',
+            organizationName: name
+        }
+    });
 }
