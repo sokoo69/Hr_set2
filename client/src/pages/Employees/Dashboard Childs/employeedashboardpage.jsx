@@ -60,6 +60,6 @@ export const EmployeeDashboardPage = () => {
                 <SalaryChart balancedata={DashboardState.data} />
                 <DataTable noticedata={DashboardState.data} />
             </div>
-        </>
+        </div>
     )
 }
