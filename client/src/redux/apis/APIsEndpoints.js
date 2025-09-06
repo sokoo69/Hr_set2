@@ -17,7 +17,7 @@ export const HREndPoints = {
 }
 
 export const DashboardEndPoints = {
-    GETDATA: "/api/v1/dashboard/HR-dashboard"
+    GETDATA: "/api/HR-dashboard"
 }
 
 export const EmployeeDashboardEndPoints = {
@@ -25,14 +25,14 @@ export const EmployeeDashboardEndPoints = {
 }
 
 export const HREmployeesPageEndPoints = {
-    GETALL: "/api/v1/employee/all",
+    GETALL: "/api/employees",
     ADDEMPLOYEE: "/api/auth/employee/signup",
     GETONE: (EMID) => `/api/v1/employee/by-HR/${EMID}`,
     DELETE: (EMID) => `/api/v1/employee/delete-employee/${EMID}`
 }
 
 export const HRDepartmentPageEndPoints = {
-    GETALL: "/api/v1/department/all",
+    GETALL: "/api/departments",
     CREATE: "/api/v1/department/create-department",
     UPDATE: "/api/v1/department/update-department",
     DELETE: "/api/v1/department/delete-department"
