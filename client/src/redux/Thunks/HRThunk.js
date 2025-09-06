@@ -30,7 +30,7 @@ export const HandlePostHumanResources = createAsyncThunk("HandlePostHumanResourc
         
         // Real API call for signup
         if (apiroute === "SIGNUP") {
-            const response = await apiService.post('/signup', data, {
+            const response = await apiService.post('/api/signup', data, {
                 withCredentials: true
             });
             return response.data;
