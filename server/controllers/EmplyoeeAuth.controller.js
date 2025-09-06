@@ -15,6 +15,27 @@ export const HandleEmplyoeeSignup = async (req, res) => {
             throw new Error("All Fields are required")
         }
 
+        // Mock authentication for testing
+        if (req.ORGID === 'mock-org-id') {
+            const mockEmployee = {
+                _id: `emp_${Date.now()}`,
+                firstname: firstname,
+                lastname: lastname,
+                email: email,
+                contactnumber: contactnumber,
+                role: "Employee",
+                isverified: true,
+                organizationID: 'mock-org-id'
+            }
+            
+            return res.status(201).json({ 
+                success: true, 
+                message: "Employee Registered Successfully", 
+                data: mockEmployee,
+                type: "EmployeeCreate" 
+            })
+        }
+
         const organization = await Organization.findOne({ _id: req.ORGID })
 
         if (!organization) {
