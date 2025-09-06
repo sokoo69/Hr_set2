@@ -32,7 +32,8 @@ export const SignUP = ({ handlesignupform, handlesubmitform, stateformdata, erro
                         <p className="text-gray-600">Join our team and start managing your organization</p>
                     </div>
                     
-                    <div className="form-button-group w-full grid grid-cols-1 gap-5">
+                    <form onSubmit={handlesubmitform} className="w-full">
+                        <div className="form-button-group w-full grid grid-cols-1 gap-5">
 
                         <div className="form-container grid min-[250px]:grid-cols-1 sm:grid-cols-2 w-full min-[250px]:gap-3 sm:gap-10 justify-center items-center">
 
@@ -185,13 +186,19 @@ export const SignUP = ({ handlesignupform, handlesubmitform, stateformdata, erro
                         </div>
 
                         <div className="buttons w-full flex justify-between">
-                            <Button 
-                                type="button"
+                            <button 
+                                type="submit"
                                 className="min-[250px]:text-xs min-[250px]:px-2 min-[250px]:py-1 sm:px-4 sm:py-2 sm:text-sm md:text-md px-4 py-2 bg-purple-700 border-2 border-purple-700 text-white font-bold rounded-lg hover:bg-white hover:text-purple-700 hover:cursor-pointer transition-all duration-200" 
-                                onClick={handlesubmitform}
+                                onClick={(e) => {
+                                    console.log("SIGN UP BUTTON CLICKED!");
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    handlesubmitform(e);
+                                }}
+                                style={{ zIndex: 9999, position: 'relative' }}
                             >
                                 Sign Up
-                            </Button>
+                            </button>
                             <div className="sing-in flex justify-center items-center gap-2">
                                 <p className="min-[250px]:text-xs sm:text-sm">Already Have an Account?</p>
                                 <Link to={"/auth/HR/login"}>
@@ -199,8 +206,7 @@ export const SignUP = ({ handlesignupform, handlesubmitform, stateformdata, erro
                                 </Link>
                             </div>
                         </div>
-
-                    </div>
+                    </form>
                 </div>
             </div>
         </>

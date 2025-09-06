@@ -31,14 +31,20 @@ export const HRSignupPage = () => {
     }
 
     const handlesubmitform = (event) => {
+        console.log("HANDLESUBMITFORM CALLED!");
+        console.log("Event:", event);
+        console.log("Form data:", signupform);
+        
         event.preventDefault();
         
         if (signupform.textpassword === signupform.password) {
+            console.log("Passwords match - proceeding with signup");
             seterrorpopup(false)
             loadingbar.current.continuousStart();
             dispatch(HandlePostHumanResources({ apiroute: "SIGNUP", data: signupform }))
         }
         else {
+            console.log("Passwords don't match - showing error");
             seterrorpopup(true)
         }
     }
