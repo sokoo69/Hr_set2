@@ -12,22 +12,22 @@ export const HRDashboardPage = () => {
     const dispatch = useDispatch()
     const DataArray = [
         {
-            image: "/../../src/assets/HR-Dashboard/employee-2.png",
+            image: "/HR-Dashboard/employee-2.png",
             dataname: "employees",
             path: "/HR/dashboard/employees"
         },
         {
-            image: "/../../src/assets/HR-Dashboard/department.png",
+            image: "/HR-Dashboard/department.png",
             dataname: "departments",
             path: "/HR/dashboard/departments",
         },
         {
-            image: "/../../src/assets/HR-Dashboard/leave.png",
+            image: "/HR-Dashboard/leave.png",
             dataname: "leaves",
             path: "/HR/dashboard/leaves"
         },
         {
-            image: "/../../src/assets/HR-Dashboard/request.png",
+            image: "/HR-Dashboard/request.png",
             dataname: "requestes",
             path: "/HR/dashboard/requestes"
         }
@@ -45,7 +45,11 @@ export const HRDashboardPage = () => {
 
 
     return (
-        <>
+        <div className="p-6">
+            <div className="mb-8">
+                <h1 className="text-3xl font-bold text-gray-800 mb-2">HR Dashboard</h1>
+                <p className="text-gray-600">Welcome to your HR management dashboard</p>
+            </div>
             <KeyDetailBoxContentWrapper imagedataarray={DataArray} data={DashboardState.data} />
             <div className="salary-notices-container h-3/4 grid min-[250px]:grid-cols-1 lg:grid-cols-2 min-[250px]:gap-3 xl:gap-3">
                 <SalaryChart balancedata={DashboardState.data} />

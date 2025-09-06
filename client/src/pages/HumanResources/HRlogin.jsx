@@ -143,7 +143,7 @@ export const HRLogin = () => {
                 )}
                 
                 <SignIn 
-                    image={"../../src/assets/HR-Welcome.jpg"} 
+                    image={"/Employee-Welcome.jpg"} 
                     handlesigninform={handlesigninform} 
                     handlesigninsubmit={handlesigninsubmit} 
                     targetedstate={HRState} 

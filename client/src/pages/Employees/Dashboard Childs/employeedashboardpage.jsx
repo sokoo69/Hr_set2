@@ -13,22 +13,22 @@ export const EmployeeDashboardPage = () => {
     const dispatch = useDispatch()
     const DataArray = [
         {
-            image: "/../../src/assets/HR-Dashboard/employee-2.png",
+            image: "/HR-Dashboard/employee-2.png",
             dataname: "profile",
             path: "/auth/employee/employee-dashboard/profile"
         },
         {
-            image: "/../../src/assets/HR-Dashboard/leave.png",
+            image: "/HR-Dashboard/leave.png",
             dataname: "leaves",
             path: "/auth/employee/employee-dashboard/leaves",
         },
         {
-            image: "/../../src/assets/HR-Dashboard/request.png",
+            image: "/HR-Dashboard/request.png",
             dataname: "requests",
             path: "/auth/employee/employee-dashboard/requests"
         },
         {
-            image: "/../../src/assets/HR-Dashboard/department.png",
+            image: "/HR-Dashboard/department.png",
             dataname: "salary",
             path: "/auth/employee/employee-dashboard/salary"
         }
@@ -45,7 +45,11 @@ export const EmployeeDashboardPage = () => {
     }
 
     return (
-        <>
+        <div className="p-6">
+            <div className="mb-8">
+                <h1 className="text-3xl font-bold text-gray-800 mb-2">Employee Dashboard</h1>
+                <p className="text-gray-600">Manage your employee information and requests</p>
+            </div>
             <KeyDetailBoxContentWrapper imagedataarray={DataArray} data={DashboardState.data} />
             <div className="charts-container flex flex-col gap-5 min-[250px]:mx-1 md:mx-2">
                 <SalaryChart balancedata={DashboardState.data} />

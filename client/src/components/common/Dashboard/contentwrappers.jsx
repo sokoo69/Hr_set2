@@ -11,9 +11,16 @@ export const ContentWraperMain = ({ children }) => {
 
 export const KeyDetailBoxContentWrapper = ({ imagedataarray, data }) => {
     return (
-        <div className="key-details-box-content grid min-[250px]:grid-cols-1 sm:grid-cols-2 min-[1000px]:grid-cols-4 my-2">
-            {imagedataarray.map((item) => <Link to={item.path}> <KeyDetailsBox image={item.image} dataname={item.dataname} 
-            data={ data ?  data[item["dataname"]] : ""}/> </Link>)}
+        <div className="key-details-box-content grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 my-6">
+            {imagedataarray.map((item, index) => (
+                <Link key={index} to={item.path} className="block">
+                    <KeyDetailsBox 
+                        image={item.image} 
+                        dataname={item.dataname} 
+                        data={data ? data[item["dataname"]] : "0"}
+                    />
+                </Link>
+            ))}
         </div>
     )
 }
