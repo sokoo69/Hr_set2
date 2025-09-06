@@ -1,3 +1,5 @@
+import { VercelRequest, VercelResponse } from '@vercel/node';
+
 // Vercel serverless function for HR login
 export default async function handler(req, res) {
   // Enable CORS

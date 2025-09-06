@@ -1,3 +1,5 @@
+import { VercelRequest, VercelResponse } from '@vercel/node';
+
 export default async function handler(req, res) {
     // Set CORS headers
     res.setHeader('Access-Control-Allow-Credentials', true);
