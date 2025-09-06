@@ -17,7 +17,7 @@ export const HREndPoints = {
 }
 
 export const DashboardEndPoints = {
-    GETDATA: "/api/HR-dashboard"
+    GETDATA: "/api/dashboard"
 }
 
 export const EmployeeDashboardEndPoints = {
