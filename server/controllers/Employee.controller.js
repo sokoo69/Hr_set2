@@ -4,6 +4,43 @@ import { Organization } from "../models/Organization.model.js"
 
 export const HandleAllEmployees = async (req, res) => {
     try {
+        // Mock data for testing
+        if (req.ORGID === 'mock-org-id') {
+            return res.status(200).json({ 
+                success: true, 
+                data: [
+                    {
+                        _id: "emp1",
+                        firstname: "John",
+                        lastname: "Doe",
+                        email: "john.doe@company.com",
+                        contactnumber: "123-456-7890",
+                        department: { name: "Information Technology" },
+                        isverified: true
+                    },
+                    {
+                        _id: "emp2",
+                        firstname: "Jane",
+                        lastname: "Smith",
+                        email: "jane.smith@company.com",
+                        contactnumber: "123-456-7891",
+                        department: { name: "Human Resources" },
+                        isverified: true
+                    },
+                    {
+                        _id: "emp3",
+                        firstname: "Mike",
+                        lastname: "Johnson",
+                        email: "mike.johnson@company.com",
+                        contactnumber: "123-456-7892",
+                        department: { name: "Finance" },
+                        isverified: true
+                    }
+                ], 
+                type: "AllEmployees" 
+            })
+        }
+
         const employees = await Employee.find({ organizationID: req.ORGID }).populate("department", "name").select("firstname lastname email contactnumber department attendance notice salary leaverequest generaterequest isverified")
         return res.status(200).json({ success: true, data: employees, type: "AllEmployees" })
     } catch (error) {

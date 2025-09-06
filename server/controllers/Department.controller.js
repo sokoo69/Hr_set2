@@ -29,6 +29,51 @@ export const HandleCreateDepartment = async (req, res) => {
 
 export const HandleAllDepartments = async (req, res) => {
     try {
+        // Mock data for testing
+        if (req.ORGID === 'mock-org-id') {
+            return res.status(200).json({ 
+                success: true, 
+                message: "All departments retrieved successfully",
+                data: [
+                    {
+                        _id: "dept1",
+                        name: "Human Resources",
+                        description: "Manages employee relations, recruitment, and HR policies",
+                        employees: [
+                            { _id: "emp1", firstname: "John", lastname: "Doe", email: "john.doe@company.com", contactnumber: "123-456-7890" },
+                            { _id: "emp2", firstname: "Jane", lastname: "Smith", email: "jane.smith@company.com", contactnumber: "123-456-7891" }
+                        ],
+                        notice: [
+                            { _id: "notice1", title: "HR Policy Update", audience: "All Employees", createdby: "HR Team" }
+                        ]
+                    },
+                    {
+                        _id: "dept2",
+                        name: "Information Technology",
+                        description: "Handles software development, system maintenance, and technical support",
+                        employees: [
+                            { _id: "emp3", firstname: "Mike", lastname: "Johnson", email: "mike.johnson@company.com", contactnumber: "123-456-7892" }
+                        ],
+                        notice: [
+                            { _id: "notice2", title: "System Maintenance", audience: "IT Department", createdby: "IT Manager" }
+                        ]
+                    },
+                    {
+                        _id: "dept3",
+                        name: "Finance",
+                        description: "Manages financial planning, budgeting, and accounting operations",
+                        employees: [
+                            { _id: "emp4", firstname: "Sarah", lastname: "Wilson", email: "sarah.wilson@company.com", contactnumber: "123-456-7893" }
+                        ],
+                        notice: [
+                            { _id: "notice3", title: "Budget Review", audience: "Finance Team", createdby: "CFO" }
+                        ]
+                    }
+                ], 
+                type: "AllDepartments" 
+            })
+        }
+
         const departments = await Department.find({ organizationID: req.ORGID }).populate("employees notice HumanResources", "firstname lastname email contactnumber title audience createdby")
 
         return res.status(200).json({ success: true, message: "All departments retrieved successfully", data: departments, type: "AllDepartments" })

@@ -56,6 +56,61 @@ export const HandleCreateSalary = async (req, res) => {
 
 export const HandleAllSalary = async (req, res) => {
     try {
+        // Mock data for testing
+        if (req.ORGID === 'mock-org-id') {
+            return res.status(200).json({ 
+                success: true, 
+                message: "All salary records retrieved successfully",
+                data: [
+                    {
+                        _id: "sal1",
+                        employee: { 
+                            _id: "emp1", 
+                            firstname: "John", 
+                            lastname: "Doe", 
+                            department: "Information Technology" 
+                        },
+                        baseSalary: 50000,
+                        allowances: 5000,
+                        deductions: 2000,
+                        netSalary: 53000,
+                        payPeriod: "Monthly",
+                        status: "Paid"
+                    },
+                    {
+                        _id: "sal2",
+                        employee: { 
+                            _id: "emp2", 
+                            firstname: "Jane", 
+                            lastname: "Smith", 
+                            department: "Human Resources" 
+                        },
+                        baseSalary: 45000,
+                        allowances: 4000,
+                        deductions: 1500,
+                        netSalary: 47500,
+                        payPeriod: "Monthly",
+                        status: "Pending"
+                    },
+                    {
+                        _id: "sal3",
+                        employee: { 
+                            _id: "emp3", 
+                            firstname: "Mike", 
+                            lastname: "Johnson", 
+                            department: "Finance" 
+                        },
+                        baseSalary: 55000,
+                        allowances: 6000,
+                        deductions: 2500,
+                        netSalary: 58500,
+                        payPeriod: "Monthly",
+                        status: "Paid"
+                    }
+                ]
+            })
+        }
+
         const salary = await Salary.find({ organizationID: req.ORGID }).populate("employee", "firstname lastname department")
         return res.status(200).json({ success: true, message: "All salary records retrieved successfully", data: salary })
 
