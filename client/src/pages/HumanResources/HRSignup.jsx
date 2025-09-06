@@ -54,7 +54,17 @@ export const HRSignupPage = () => {
             console.log("HR Signup successful, navigating to dashboard...")
             navigate("/HR/dashboard/dashboard-data")
         }
-    }, [HRState.isAuthenticated])
+        
+        // Handle successful signup (not login)
+        if (HRState.success && HRState.success.type === "HRSignup") {
+            loadingbar.current.complete()
+            console.log("HR Signup successful, redirecting to login...")
+            // Show success message and redirect to login after delay
+            setTimeout(() => {
+                navigate("/auth/HR/login")
+            }, 2000)
+        }
+    }, [HRState.isAuthenticated, HRState.success])
 
     // Debug logging
     useEffect(() => {

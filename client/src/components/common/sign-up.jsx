@@ -10,10 +10,20 @@ export const SignUP = ({ handlesignupform, handlesubmitform, stateformdata, erro
         <>
             {employeestate.error.status ? <ErrorPopup error={employeestate.error.message} /> : null}
             {errorpopup ? <ErrorPopup error={"Password does not match, Please try again"} /> : null}
-            <div className="HR-form-content justify-center items-center min-[250px]:w-[90%] 2xl:w-[80%] grid grid-cols-1 min-[900px]:grid-cols-2 mx-auto">
+            <div className="HR-form-content justify-center items-center min-[250px]:w-[90%] 2xl:w-[80%] grid grid-cols-1 min-[900px]:grid-cols-2 mx-auto gap-8">
 
-                <div className="form-img mx-auto">
-                    <img src="../../src/assets/Employee-Welcome.jpg" alt="Your Company" className=" min-[250px]:max-w-[15rem] min-[600px]:max-w-sm min-[900px]:max-w-sm 2xl:max-w-md" />
+                <div className="form-img mx-auto flex justify-center items-center">
+                    <div className="w-64 h-64 bg-gradient-to-br from-purple-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-2xl">
+                        <div className="text-center text-white">
+                            <div className="w-16 h-16 mx-auto mb-4 bg-white/20 rounded-full flex items-center justify-center">
+                                <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+                                </svg>
+                            </div>
+                            <h3 className="text-xl font-bold">Join Our Team</h3>
+                            <p className="text-sm opacity-90">Create your HR account</p>
+                        </div>
+                    </div>
                 </div>
 
                 {/* <div className="form-content flex flex-col gap-6 sm:justify-center min-[250px]:items-center sm:items-center md:items-start md:justify-normal">
@@ -156,7 +166,13 @@ export const SignUP = ({ handlesignupform, handlesubmitform, stateformdata, erro
 
                 
                 
-                <div className="form-button-group w-full grid grid-cols-1 gap-5">
+                <div className="form-content-section">
+                    <div className="form-header mb-6">
+                        <h1 className="text-3xl font-bold text-gray-800 mb-2">Create HR Account</h1>
+                        <p className="text-gray-600">Join our team and start managing your organization</p>
+                    </div>
+                    
+                    <div className="form-button-group w-full grid grid-cols-1 gap-5">
 
                     <div className="form-container grid min-[250px]:grid-cols-1 sm:grid-cols-2 w-full min-[250px]:gap-3 sm:gap-10 justify-center items-center">
 
@@ -317,7 +333,6 @@ export const SignUP = ({ handlesignupform, handlesubmitform, stateformdata, erro
                             </Link>
                         </div>
                     </div>
-
                 </div>
             </div>
 
