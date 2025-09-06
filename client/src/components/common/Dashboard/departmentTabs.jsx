@@ -221,10 +221,10 @@ export const DepartmentContent = ({ CurrentDepartmentData }) => {
                 <div className="tabs-with-button flex justify-between items-center min-[250px]:flex-col-reverse sm:flex-row">
                     <TabsList className="min-[250px]:max-w-[250px] md:max-w-[300px] bg-blue-200 text-blue-700 my-3 min-[250px]:flex min-[250px]:flex-col min-[250px]:py-14 min-[350px]:flex min-[350px]:flex-row min-[350px]:py-6">
                         <TabsTrigger value="account" className="px-4 py-2 font-bold m-2 min-[250px]:text-xs md:text-sm">
-                            <span className="text-blue-700">{CurrentDepartmentData.employees.length} Employees</span>
+                            <span className="text-blue-700">{CurrentDepartmentData.employees?.length || 0} Employees</span>
                         </TabsTrigger>
                         <TabsTrigger value="password" className="px-4 py-2 font-bold m-2 min-[250px]:text-xs md:text-sm">
-                            <span className="text-blue-700">{CurrentDepartmentData.notice.length} Notice</span>
+                            <span className="text-blue-700">{CurrentDepartmentData.notice?.length || 0} Notice</span>
                         </TabsTrigger>
                     </TabsList>
                     <div className="edd-employees-dialog-box">
