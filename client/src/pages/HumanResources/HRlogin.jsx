@@ -32,11 +32,21 @@ export const HRLogin = () => {
         CommonStateHandler(signinform, setsigninform, event)
     }
 
-    const handlesigninsubmit = (e) => {
+    const handlesigninsubmit = async (e) => {
         e.preventDefault();
+        console.log("Submitting HR login with:", {
+            email: signinform.email,
+            hasPassword: !!signinform.password,
+            formData: signinform
+        });
         loadingbar.current.continuousStart();
-        console.log("Submitting HR login with:", signinform);
-        dispatch(HandlePostHumanResources({ apiroute: "LOGIN", data: signinform }))
+        try {
+            const result = await dispatch(HandlePostHumanResources({ apiroute: "LOGIN", data: signinform })).unwrap();
+            console.log('HR Login Success:', result);
+        } catch (error) {
+            console.error('HR Login Failed:', error);
+            loadingbar.current.complete();
+        }
     }
 
     const handleLogout = () => {

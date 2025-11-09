@@ -21,9 +21,16 @@ export const HandlePostEmployees = createAsyncThunk("HandlePostEmployees", async
         
         // Real API call for employee login
         if (apiroute === "LOGIN") {
+            console.log('Employee Login API Call:', {
+                url: `${APIsEndPoints[apiroute]}`,
+                baseURL: apiService.defaults.baseURL,
+                fullURL: `${apiService.defaults.baseURL}${APIsEndPoints[apiroute]}`,
+                data: { ...data, password: data.password ? '***' : undefined }
+            });
             const response = await apiService.post(`${APIsEndPoints[apiroute]}`, data, {
                 withCredentials: true
             });
+            console.log('Employee Login API Response:', response.data);
             return response.data;
         }
         

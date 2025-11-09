@@ -8,9 +8,20 @@ export const SignIn = ({ image, handlesigninform, handlesigninsubmit, targetedst
     const [isLoading, setIsLoading] = useState(false)
 
     const handleSubmit = async (e) => {
+        e.preventDefault();
+        console.log('Sign In Form Submitted:', {
+            email: statevalue.email,
+            password: statevalue.password ? '***' : 'empty',
+            formId
+        });
         setIsLoading(true)
-        await handlesigninsubmit(e)
-        setIsLoading(false)
+        try {
+            await handlesigninsubmit(e)
+        } catch (error) {
+            console.error('Sign In Submit Error:', error);
+        } finally {
+            setIsLoading(false)
+        }
     }
 
     // Debug: Log error state

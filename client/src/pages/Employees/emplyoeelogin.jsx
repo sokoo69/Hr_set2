@@ -35,8 +35,19 @@ export const EmployeeLogin = () => {
 
     const handlesigninsubmit = async (e) => {
         e.preventDefault();
+        console.log('Employee Login Submit:', {
+            email: signinform.email,
+            hasPassword: !!signinform.password,
+            formData: signinform
+        });
         loadingbar.current.continuousStart();
-        dispatch(HandlePostEmployees({ apiroute: "LOGIN", data: signinform }))
+        try {
+            const result = await dispatch(HandlePostEmployees({ apiroute: "LOGIN", data: signinform })).unwrap();
+            console.log('Employee Login Success:', result);
+        } catch (error) {
+            console.error('Employee Login Failed:', error);
+            loadingbar.current.complete();
+        }
     }
 
     const handleLogout = () => {
