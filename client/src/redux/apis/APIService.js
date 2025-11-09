@@ -1,14 +1,30 @@
 import axios from 'axios';
 
-// Use relative URLs in production (same domain) or localhost in development
+// Determine the correct API base URL
+const getBaseURL = () => {
+  if (process.env.NODE_ENV === 'development') {
+    return "http://localhost:5000";
+  }
+  
+  // In production, check if we're on the client-only domain or the full-stack domain
+  const currentHost = window.location.hostname;
+  
+  // If on client-only domain (hr-set2-client.vercel.app), use the full-stack domain for API
+  if (currentHost.includes('hr-set2-client')) {
+    return "https://hr-set2.vercel.app";
+  }
+  
+  // If on full-stack domain (hr-set2.vercel.app), use relative URLs
+  return "";
+};
+
 export const apiService = axios.create({
-  baseURL: process.env.NODE_ENV === 'production' 
-    ? "" // Use relative URLs when frontend and backend are on same domain
-    : "http://localhost:5000",
+  baseURL: getBaseURL(),
   headers: {
     'Content-Type': 'application/json',
   },
   timeout: 30000, // 30 second timeout
+  withCredentials: true, // Always send credentials
 });
 
 // Add response interceptor for better error handling
