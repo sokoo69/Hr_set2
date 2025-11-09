@@ -27,6 +27,20 @@ import cors from "cors"
 dotenv.config()
 const app = express();
 
+// Initialize database connection for Vercel serverless
+let dbConnected = false;
+const connectDatabase = async () => {
+  if (!dbConnected) {
+    try {
+      await ConnectDB();
+      dbConnected = true;
+    } catch (error) {
+      console.error('Database connection error:', error.message);
+      // Don't exit in serverless - let requests handle the error
+    }
+  }
+};
+
 // ES module __dirname equivalent
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -84,12 +98,23 @@ app.use("/api/v1/corporate-calendar", CorporateCalendarRouter)
 
 app.use("/api/v1/balance", BalanceRouter)
 
+// Middleware to ensure database connection before handling requests
+app.use(async (req, res, next) => {
+  // Skip database connection for health check
+  if (req.path === '/api/health') {
+    return next();
+  }
+  await connectDatabase();
+  next();
+});
+
 // Health check endpoint
 app.get("/api/health", (req, res) => {
   res.status(200).json({ 
     success: true, 
     message: "Server is running", 
-    timestamp: new Date().toISOString() 
+    timestamp: new Date().toISOString(),
+    database: dbConnected ? "connected" : "not connected"
   });
 });
 
