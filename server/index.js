@@ -5,7 +5,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import EmployeeAuthRouter from './routes/EmployeeAuth.route.js'
 import HRAuthrouter from './routes/HRAuth.route.js'
-import DashboardRouter from './routes/Dashbaord.route.js'
+import DashboardRouter from './routes/Dashboard.route.js'
 import EmployeeRouter from './routes/Employee.route.js'
 import HRRouter from './routes/HR.route.js'
 import DepartmentRouter from './routes/Department.route.js'
@@ -13,7 +13,7 @@ import SalaryRouter from './routes/Salary.route.js'
 import NoticeRouter from "./routes/Notice.route.js"
 import LeaveRouter from './routes/Leave.route.js'
 import AttendanceRouter from './routes/Attendance.route.js'
-import RecruitmentRouter from './routes/Recuritment.route.js'
+import RecruitmentRouter from './routes/Recruitment.route.js'
 import ApplicantRouter from './routes/Applicant.route.js'
 import InterviewInsightRouter from './routes/InterviewInsights.route.js'
 import GenerateRequestRouter from './routes/GenerateRequest.route.js'

@@ -50,7 +50,7 @@ export const EmployeeLogin = () => {
     }
 
 
-    const RedirectToDashbaord = () => {
+    const RedirectToDashboard = () => {
         loadingbar.current.complete()
         navigate("/auth/employee/employee-dashboard/dashboard-data")
     }
@@ -62,7 +62,7 @@ export const EmployeeLogin = () => {
     useEffect(() => {
         // Only redirect if user is authenticated (after manual login)
         if (EmployeeState.isAuthenticated) {
-            RedirectToDashbaord()
+            RedirectToDashboard()
         }
     }, [EmployeeState.isAuthenticated])
 
