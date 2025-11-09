@@ -26,7 +26,7 @@ export const ErrorPopup = ({ error, onClose }) => {
                     </div>
                     <div className="flex-1 min-w-0">
                         <h3 className="text-sm font-semibold text-gray-900 mb-1">Error</h3>
-                        <p className="text-sm text-gray-600">{error}</p>
+                        <p className="text-sm text-gray-600">{error || "An unexpected error occurred"}</p>
                     </div>
                     <button
                         onClick={() => {

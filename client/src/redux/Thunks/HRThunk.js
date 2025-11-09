@@ -94,11 +94,22 @@ export const HandlePostHumanResources = createAsyncThunk("HandlePostHumanResourc
     } catch (error) {
         console.log('HR Post Error:', error);
         if (error.response && error.response.data) {
-            return rejectWithValue(error.response.data);
+            return rejectWithValue({
+                ...error.response.data,
+                message: error.response.data.message || 'An error occurred'
+            });
+        } else if (error.request) {
+            // Network error - no response received
+            return rejectWithValue({
+                success: false,
+                message: 'Network error: Unable to connect to server. Please check your internet connection.',
+                type: apiroute === "LOGIN" ? "HRLogin" : undefined
+            });
         } else {
             return rejectWithValue({
                 success: false,
-                message: error.message || 'Network error occurred'
+                message: error.message || 'An unexpected error occurred',
+                type: apiroute === "LOGIN" ? "HRLogin" : undefined
             });
         }
     }
