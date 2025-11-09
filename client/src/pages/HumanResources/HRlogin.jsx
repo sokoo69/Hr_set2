@@ -36,45 +36,7 @@ export const HRLogin = () => {
         e.preventDefault();
         loadingbar.current.continuousStart();
         console.log("Submitting HR login with:", signinform);
-        
-        // Mock authentication for testing without API
-        if (signinform.email === 'Shawon.saykot2023@gmail.com' && signinform.password === 'Shawon.saykot2023') {
-            // Simulate successful login
-            setTimeout(() => {
-                // Set mock authentication cookie
-                document.cookie = "HRtoken=mock-jwt-token-12345; path=/; max-age=86400";
-                
-                // Dispatch mock success action
-                dispatch({
-                    type: 'HandlePostHumanResources/fulfilled',
-                    payload: {
-                        success: true,
-                        message: 'HR Login Successfull',
-                        type: 'HRLogin',
-                        token: 'mock-jwt-token-12345',
-                        user: {
-                            email: signinform.email,
-                            role: 'HR-Admin'
-                        }
-                    }
-                });
-                
-                loadingbar.current.complete();
-            }, 1000); // Simulate loading time
-        } else {
-            // Simulate failed login
-            setTimeout(() => {
-                dispatch({
-                    type: 'HandlePostHumanResources/rejected',
-                    payload: {
-                        success: false,
-                        message: 'Invaild Credentials, Please Add Correct One',
-                        type: 'HRLogin'
-                    }
-                });
-                loadingbar.current.complete();
-            }, 1000);
-        }
+        dispatch(HandlePostHumanResources({ apiroute: "LOGIN", data: signinform }))
     }
 
     const handleLogout = () => {

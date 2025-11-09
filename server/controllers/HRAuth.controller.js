@@ -109,32 +109,38 @@ export const HandleHRVerifyEmail = async (req, res) => {
 export const HandleHRLogin = async (req, res) => {
     const { email, password } = req.body
     try {
-        // Mock authentication for testing without database
-        if (email === 'Shawon.saykot2023@gmail.com' && password === 'Shawon.saykot2023') {
-            // Set a mock JWT token cookie
-            res.cookie('HRtoken', 'mock-jwt-token-12345', {
-                httpOnly: true,
-                secure: process.env.NODE_ENV === 'production',
-                sameSite: 'lax',
-                maxAge: 24 * 60 * 60 * 1000 // 24 hours
-            });
-            
-            return res.status(200).json({ 
-                success: true, 
-                message: "HR Login Successfull", 
-                type: "HRLogin",
-                token: 'mock-jwt-token-12345',
-                user: {
-                    email: email,
-                    role: 'HR-Admin'
-                }
-            })
-        } else {
-            return res.status(400).json({ success: false, message: "Invaild Credentials, Please Add Correct One", type: "HRLogin" })
+        if (!email || !password) {
+            return res.status(400).json({ success: false, message: "Email and password are required", type: "HRLogin" })
         }
+
+        const HR = await HumanResources.findOne({ email: email.toLowerCase().trim() })
+
+        if (!HR) {
+            console.log('HR Login Failed: User not found for email:', email)
+            return res.status(404).json({ success: false, message: "Invalid Credentials, Please Enter Correct One", type: "HRLogin" })
+        }
+
+        const isMatch = await bcrypt.compare(password, HR.password)
+
+        if (!isMatch) {
+            console.log('HR Login Failed: Password mismatch for email:', email)
+            return res.status(404).json({ success: false, message: "Invalid Credentials, Please Enter Correct One", type: "HRLogin" })
+        }
+
+        GenerateJwtTokenAndSetCookiesHR(res, HR._id, HR.role, HR.organizationID)
+        HR.lastlogin = new Date()
+        await HR.save()
+        
+        console.log('HR Login Success for:', email)
+        return res.status(200).json({ 
+            success: true, 
+            message: "HR Login Successfull", 
+            type: "HRLogin"
+        })
     }
     catch (error) {
-        return res.status(500).json({ success: false, message: "Internal Server Error", error: error, type: "HRLogin" })
+        console.error('HR Login Error:', error)
+        return res.status(500).json({ success: false, message: "Internal Server Error", error: error.message, type: "HRLogin" })
     }
 }
 

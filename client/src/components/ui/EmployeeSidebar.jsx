@@ -1,9 +1,10 @@
-import { NavLink, useNavigate } from "react-router-dom"
+import { NavLink, useNavigate, useLocation } from "react-router-dom"
 import { 
     Sidebar, 
     SidebarContent, 
     SidebarFooter, 
     SidebarGroup, 
+    SidebarGroupContent,
     SidebarGroupLabel, 
     SidebarHeader, 
     SidebarMenu, 
@@ -25,6 +26,7 @@ import { HandlePostEmployees } from "../../redux/Thunks/EmployeeThunk.js"
 
 export const EmployeeDashboardSidebar = () => {
     const navigate = useNavigate()
+    const location = useLocation()
     const dispatch = useDispatch()
     
     const handleLogout = () => {
@@ -88,12 +90,12 @@ export const EmployeeDashboardSidebar = () => {
                                         <SidebarMenuItem className="w-full">
                                             <div className="flex items-center space-x-3">
                                                 <div className={`p-2 rounded-lg transition-colors duration-200 ${
-                                                    window.location.pathname === item.path 
+                                                    location.pathname === item.path 
                                                         ? 'bg-white/20' 
                                                         : 'bg-gray-50 group-hover:bg-gray-100'
                                                 }`}>
                                                     <Icon className={`w-5 h-5 transition-colors duration-200 ${
-                                                        window.location.pathname === item.path 
+                                                        location.pathname === item.path 
                                                             ? 'text-white' 
                                                             : 'text-gray-600'
                                                     }`} />

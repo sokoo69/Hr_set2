@@ -49,4 +49,20 @@ export const SalaryEndPoints = {
     GETONE: (salaryID) => `/api/v1/salary/${salaryID}`,
     UPDATE: "/api/v1/salary/update-salary",
     DELETE: (salaryID) => `/api/v1/salary/delete-salary/${salaryID}`
+}
+
+export const LeaveEndPoints = {
+    GETALL: "/api/v1/leave/all",
+    CREATE: "/api/v1/leave/create-leave",
+    GETONE: (leaveID) => `/api/v1/leave/${leaveID}`,
+    UPDATE: "/api/v1/leave/employee-update-leave",
+    DELETE: (leaveID) => `/api/v1/leave/delete-leave/${leaveID}`
+}
+
+export const RequestEndPoints = {
+    GETALL: "/api/v1/generate-request/all",
+    CREATE: "/api/v1/generate-request/create-request",
+    GETONE: (requestID) => `/api/v1/generate-request/${requestID}`,
+    UPDATE: "/api/v1/generate-request/update-request-content",
+    DELETE: (requestID) => `/api/v1/generate-request/delete-request/${requestID}`
 } 

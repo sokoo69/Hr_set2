@@ -19,34 +19,12 @@ export const HandlePostEmployees = createAsyncThunk("HandlePostEmployees", async
     try {
         const { apiroute, data, type } = EmployeeData
         
-        // Mock employee login functionality
+        // Real API call for employee login
         if (apiroute === "LOGIN") {
-            // Simulate API delay
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            
-            // Mock employee credentials
-            if (data.email === 'employee@company.com' && data.password === 'employee123') {
-                return {
-                    success: true,
-                    message: "Employee Login Successful",
-                    type: "EmployeeLogin",
-                    token: 'mock-employee-jwt-token-12345',
-                    user: { 
-                        email: data.email, 
-                        role: 'Employee',
-                        firstname: 'John',
-                        lastname: 'Doe',
-                        department: 'IT',
-                        employeeId: 'EMP001'
-                    }
-                };
-            } else {
-                return rejectWithValue({
-                    success: false,
-                    message: "Invalid Employee Credentials, Please Add Correct One",
-                    type: "EmployeeLogin"
-                });
-            }
+            const response = await apiService.post(`${APIsEndPoints[apiroute]}`, data, {
+                withCredentials: true
+            });
+            return response.data;
         }
         
         if (type == "resetpassword") {

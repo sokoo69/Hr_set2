@@ -5,10 +5,11 @@ import { useDispatch, useSelector } from "react-redux"
 import { Loading } from "../../../components/common/loading.jsx"
 import { ListItems } from "../../../components/common/Dashboard/ListDesigns"
 import { ListContainer } from "../../../components/common/Dashboard/ListDesigns"
-import { HandleGetAllSalaries } from "../../../redux/Thunks/SalaryThunk.js"
+import { HandleGetAllSalaries, HandleDeleteSalary, HandleUpdateSalary } from "../../../redux/Thunks/SalaryThunk.js"
 import { Button } from "@/components/ui/button"
 import { Plus, Edit, Trash2 } from "lucide-react"
 import { ProcessPayrollDialogBox } from "../../../components/common/Dashboard/dialogboxes.jsx"
+import { useToast } from "../../../hooks/use-toast.js"
 
 export const HRSalariesPage = () => {
     const dispatch = useDispatch()
@@ -20,14 +21,41 @@ export const HRSalariesPage = () => {
     }, [dispatch])
 
 
-    const handleEditSalary = (salaryId) => {
-        console.log("Editing salary:", salaryId)
-        // TODO: Implement salary editing
+    const { toast } = useToast()
+
+    const handleEditSalary = async (salaryId) => {
+        try {
+            // TODO: Open edit dialog with salary data
+            toast({
+                title: "Edit Salary",
+                description: "Edit functionality will open a dialog with salary details",
+            })
+        } catch (error) {
+            toast({
+                variant: "destructive",
+                title: "Error",
+                description: "Failed to load salary details",
+            })
+        }
     }
 
-    const handleDeleteSalary = (salaryId) => {
-        console.log("Deleting salary:", salaryId)
-        // TODO: Implement salary deletion
+    const handleDeleteSalaryClick = async (salaryId) => {
+        if (window.confirm("Are you sure you want to delete this salary record?")) {
+            try {
+                await dispatch(HandleDeleteSalary(salaryId)).unwrap()
+                dispatch(HandleGetAllSalaries()) // Refresh list
+                toast({
+                    title: "Success",
+                    description: "Salary record deleted successfully",
+                })
+            } catch (error) {
+                toast({
+                    variant: "destructive",
+                    title: "Error",
+                    description: error.message || "Failed to delete salary record",
+                })
+            }
+        }
     }
 
     if (SalariesState.isLoading) {
@@ -99,7 +127,7 @@ export const HRSalariesPage = () => {
                                     <Button
                                         size="sm"
                                         variant="outline"
-                                        onClick={() => handleDeleteSalary(salary._id)}
+                                        onClick={() => handleDeleteSalaryClick(salary._id)}
                                         className="h-8 w-8 p-0 text-red-600 hover:text-red-700"
                                     >
                                         <Trash2 className="w-3 h-3" />

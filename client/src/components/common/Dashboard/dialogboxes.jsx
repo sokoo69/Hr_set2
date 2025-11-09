@@ -30,6 +30,8 @@ import {
 } from "@/components/ui/command"
 import { HandleGetAllEmployeesIDs } from "../../../redux/Thunks/EmployeesIDsThunk.js"
 import { HandleProcessPayroll, HandleGetAllSalaries } from "../../../redux/Thunks/SalaryThunk.js"
+import { HandleCreateLeave } from "../../../redux/Thunks/LeaveThunk.js"
+import { HandleCreateRequest } from "../../../redux/Thunks/RequestThunk.js"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -419,27 +421,33 @@ export const RemoveEmployeeFromDepartmentDialogBox = ({ DepartmentName, Departme
 
 // Add Leave Dialog Box
 export const AddLeaveDialogBox = () => {
+    const dispatch = useDispatch()
     const [formdata, setformdata] = useState({
-        employeeId: "",
         leaveType: "",
         startDate: "",
         endDate: "",
         reason: "",
     })
+    const [open, setOpen] = useState(false)
 
     const handleformchange = (event) => {
         CommonStateHandler(formdata, setformdata, event)
     }
 
-    const handlesubmit = (event) => {
+    const handlesubmit = async (event) => {
         event.preventDefault()
-        console.log("Leave form submitted:", formdata)
-        // TODO: Add API call for creating leave
+        try {
+            await dispatch(HandleCreateLeave(formdata)).unwrap()
+            setOpen(false)
+            setformdata({ leaveType: "", startDate: "", endDate: "", reason: "" })
+        } catch (error) {
+            console.error("Failed to create leave:", error)
+        }
     }
 
     return (
         <div className="AddLeave-content">
-            <Dialog>
+            <Dialog open={open} onOpenChange={setOpen}>
                 <DialogTrigger asChild>
                     <Button className="btn-sm btn-blue-700 text-md border-2 min-[250px]:px-2 min-[250px]:py-1 sm:px-1 sm:py-0.5 xl:px-2 xl:py-1 rounded-md bg-blue-700 border-blue-700 hover:bg-transparent hover:text-blue-700">
                         Add Leave
@@ -541,27 +549,33 @@ export const AddLeaveDialogBox = () => {
 
 // Add Request Dialog Box
 export const AddRequestDialogBox = () => {
+    const dispatch = useDispatch()
     const [formdata, setformdata] = useState({
-        employeeId: "",
         requestType: "",
         title: "",
         description: "",
         priority: "medium",
     })
+    const [open, setOpen] = useState(false)
 
     const handleformchange = (event) => {
         CommonStateHandler(formdata, setformdata, event)
     }
 
-    const handlesubmit = (event) => {
+    const handlesubmit = async (event) => {
         event.preventDefault()
-        console.log("Request form submitted:", formdata)
-        // TODO: Add API call for creating request
+        try {
+            await dispatch(HandleCreateRequest(formdata)).unwrap()
+            setOpen(false)
+            setformdata({ requestType: "", title: "", description: "", priority: "medium" })
+        } catch (error) {
+            console.error("Failed to create request:", error)
+        }
     }
 
     return (
         <div className="AddRequest-content">
-            <Dialog>
+            <Dialog open={open} onOpenChange={setOpen}>
                 <DialogTrigger asChild>
                     <Button className="btn-sm btn-blue-700 text-md border-2 min-[250px]:px-2 min-[250px]:py-1 sm:px-1 sm:py-0.5 xl:px-2 xl:py-1 rounded-md bg-blue-700 border-blue-700 hover:bg-transparent hover:text-blue-700">
                         Add Request

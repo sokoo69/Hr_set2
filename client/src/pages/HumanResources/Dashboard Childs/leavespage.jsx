@@ -6,16 +6,16 @@ import { Loading } from "../../../components/common/loading.jsx"
 import { ListItems } from "../../../components/common/Dashboard/ListDesigns"
 import { ListContainer } from "../../../components/common/Dashboard/ListDesigns"
 import { AddLeaveDialogBox } from "../../../components/common/Dashboard/dialogboxes.jsx"
+import { HandleGetAllLeaves } from "../../../redux/Thunks/LeaveThunk.js"
 
 export const HRLeavesPage = () => {
     const dispatch = useDispatch()
-    const HRLeavesState = useSelector((state) => state.HRLeavesPageReducer || { isLoading: false, data: [] })
+    const HRLeavesState = useSelector((state) => state.LeaveReducer || { isLoading: false, data: [] })
     const table_headings = ["Employee Name", "Leave Type", "Start Date", "End Date", "Status", "Actions"]
 
     useEffect(() => {
-        // TODO: Add API call for leaves when backend is ready
-        console.log("Leaves page loaded")
-    }, [])
+        dispatch(HandleGetAllLeaves())
+    }, [dispatch])
 
     if (HRLeavesState.isLoading) {
         return (

@@ -134,15 +134,21 @@ export const HandleResetEmplyoeeVerifyEmail = async (req, res) => {
 export const HandleEmplyoeeLogin = async (req, res) => {
     const { email, password } = req.body
     try {
-        const employee = await Employee.findOne({ email: email })
+        if (!email || !password) {
+            return res.status(400).json({ success: false, message: "Email and password are required" })
+        }
+
+        const employee = await Employee.findOne({ email: email.toLowerCase().trim() })
 
         if (!employee) {
+            console.log('Employee Login Failed: User not found for email:', email)
             return res.status(404).json({ success: false, message: "Invalid Credentials, Please Enter Correct One" })
         }
 
         const isMatch = await bcrypt.compare(password, employee.password)
 
         if (!isMatch) {
+            console.log('Employee Login Failed: Password mismatch for email:', email)
             return res.status(404).json({ success: false, message: "Invalid Credentials, Please Enter Correct One" })
         }
 
@@ -150,10 +156,12 @@ export const HandleEmplyoeeLogin = async (req, res) => {
         employee.lastlogin = new Date()
 
         await employee.save()
+        console.log('Employee Login Success for:', email)
         return res.status(200).json({ success: true, message: "Emplyoee Login Successfull" })
 
     } catch (error) {
-        res.status(500).json({ success: false, message: "Internal Server Error", error: error })
+        console.error('Employee Login Error:', error)
+        res.status(500).json({ success: false, message: "Internal Server Error", error: error.message })
     }
 
 }

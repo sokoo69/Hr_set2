@@ -7,6 +7,8 @@ import HRDepartmentPageReducer from '../Slices/HRDepartmentPageSlice.js'
 import EMployeesIDReducer from '../Slices/EmployeesIDsSlice.js'
 import EmployeeDashboardReducer from '../Reducers/EmployeeDashboardReducer.js'
 import SalaryReducer from '../Reducers/SalaryReducer.js'
+import LeaveReducer from '../Reducers/LeaveReducer.js'
+import RequestReducer from '../Reducers/RequestReducer.js'
 
 export const store = configureStore({
     reducer: {
@@ -17,6 +19,8 @@ export const store = configureStore({
         HRDepartmentPageReducer : HRDepartmentPageReducer,
         EMployeesIDReducer : EMployeesIDReducer,
         employeeDashboardReducer: EmployeeDashboardReducer,
-        SalaryReducer: SalaryReducer
+        SalaryReducer: SalaryReducer,
+        LeaveReducer: LeaveReducer,
+        RequestReducer: RequestReducer
     }
 })

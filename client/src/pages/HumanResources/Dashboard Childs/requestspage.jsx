@@ -6,16 +6,16 @@ import { Loading } from "../../../components/common/loading.jsx"
 import { ListItems } from "../../../components/common/Dashboard/ListDesigns"
 import { ListContainer } from "../../../components/common/Dashboard/ListDesigns"
 import { AddRequestDialogBox } from "../../../components/common/Dashboard/dialogboxes.jsx"
+import { HandleGetAllRequests } from "../../../redux/Thunks/RequestThunk.js"
 
 export const HRRequestsPage = () => {
     const dispatch = useDispatch()
-    const HRRequestsState = useSelector((state) => state.HRRequestsPageReducer || { isLoading: false, data: [] })
+    const HRRequestsState = useSelector((state) => state.RequestReducer || { isLoading: false, data: [] })
     const table_headings = ["Request ID", "Employee Name", "Request Type", "Description", "Status", "Date", "Actions"]
 
     useEffect(() => {
-        // TODO: Add API call for requests when backend is ready
-        console.log("Requests page loaded")
-    }, [])
+        dispatch(HandleGetAllRequests())
+    }, [dispatch])
 
     if (HRRequestsState.isLoading) {
         return (
