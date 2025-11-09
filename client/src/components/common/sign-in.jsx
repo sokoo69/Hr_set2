@@ -13,9 +13,24 @@ export const SignIn = ({ image, handlesigninform, handlesigninsubmit, targetedst
         setIsLoading(false)
     }
 
+    // Debug: Log error state
+    useEffect(() => {
+        if (targetedstate.error.status) {
+            console.log('Login Error State:', {
+                status: targetedstate.error.status,
+                message: targetedstate.error.message,
+                content: targetedstate.error.content
+            });
+        }
+    }, [targetedstate.error]);
+
     return (
         <>
-            {targetedstate.error.status ? <ErrorPopup error={targetedstate.error.message} /> : null}
+            {targetedstate.error.status ? (
+                <ErrorPopup 
+                    error={targetedstate.error.message || targetedstate.error.content?.message || "An error occurred"} 
+                />
+            ) : null}
             <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4">
                 <div className="max-w-6xl w-full">
                     <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl overflow-hidden">

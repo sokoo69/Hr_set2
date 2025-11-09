@@ -17,26 +17,36 @@ export const AsyncReducer = (builder, thunk) => {
             }
         })
         .addCase(thunk.rejected, (state, action) => {
+            // Debug: Log the rejected action
+            console.log('Employee Thunk Rejected:', {
+                payload: action.payload,
+                error: action.error
+            });
+
             // Ensure action.payload exists
             if (!action.payload) {
                 state.isLoading = false;
                 state.error.status = true;
-                state.error.message = "An unexpected error occurred";
-                state.error.content = { message: "An unexpected error occurred" };
+                state.error.message = action.error?.message || "An unexpected error occurred";
+                state.error.content = { message: state.error.message };
                 return;
             }
 
             if (action.payload.gologin) {
                 state.isLoading = false;
                 state.error.status = false;
-                state.error.message = action.payload.message
+                state.error.message = action.payload.message || "Redirect to login";
                 state.error.content = action.payload
             }
             else {
                 // Show error popup for employee login failures
                 state.isLoading = false;
                 state.error.status = true;
-                state.error.message = action.payload.message || "An error occurred";
+                // Extract message from various possible locations
+                state.error.message = action.payload.message 
+                    || action.payload.error?.message 
+                    || action.payload.content?.message
+                    || (typeof action.payload === 'string' ? action.payload : "Invalid Credentials, Please Enter Correct One");
                 state.error.content = action.payload
             }
         });
@@ -109,12 +119,18 @@ export const HRAsyncReducer = (builder, thunk) => {
             }
         })
         .addCase(thunk.rejected, (state, action) => {
+            // Debug: Log the rejected action
+            console.log('HR Thunk Rejected:', {
+                payload: action.payload,
+                error: action.error
+            });
+
             // Ensure action.payload exists
             if (!action.payload) {
                 state.isLoading = false;
                 state.error.status = true;
-                state.error.message = "An unexpected error occurred";
-                state.error.content = { message: "An unexpected error occurred" };
+                state.error.message = action.error?.message || "An unexpected error occurred";
+                state.error.content = { message: state.error.message };
                 return;
             }
 
@@ -138,7 +154,11 @@ export const HRAsyncReducer = (builder, thunk) => {
                 state.isLoading = false;
                 state.isAuthenticated = false
                 state.error.status = true; // Show error popup for login failures
-                state.error.message = action.payload.message || "Login failed";
+                // Extract message from various possible locations
+                state.error.message = action.payload.message 
+                    || action.payload.error?.message 
+                    || action.payload.content?.message
+                    || "Invalid Credentials, Please Enter Correct One";
                 state.error.content = action.payload
             }
             else if (action.payload.gologin) {
@@ -146,14 +166,18 @@ export const HRAsyncReducer = (builder, thunk) => {
                 state.isLoading = false;
                 state.isAuthenticated = false
                 state.error.status = false;
-                state.error.message = action.payload.message
+                state.error.message = action.payload.message || "Redirect to login";
                 state.error.content = action.payload
             }
             else {
                 // Default error handling - show error popup
                 state.isLoading = false;
                 state.error.status = true;
-                state.error.message = action.payload.message || "An error occurred";
+                // Extract message from various possible locations
+                state.error.message = action.payload.message 
+                    || action.payload.error?.message 
+                    || action.payload.content?.message
+                    || "An error occurred";
                 state.error.content = action.payload
             }
         });
