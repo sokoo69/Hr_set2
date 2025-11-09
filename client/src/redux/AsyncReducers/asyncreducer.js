@@ -17,6 +17,15 @@ export const AsyncReducer = (builder, thunk) => {
             }
         })
         .addCase(thunk.rejected, (state, action) => {
+            // Ensure action.payload exists
+            if (!action.payload) {
+                state.isLoading = false;
+                state.error.status = true;
+                state.error.message = "An unexpected error occurred";
+                state.error.content = { message: "An unexpected error occurred" };
+                return;
+            }
+
             if (action.payload.gologin) {
                 state.isLoading = false;
                 state.error.status = false;
@@ -24,9 +33,10 @@ export const AsyncReducer = (builder, thunk) => {
                 state.error.content = action.payload
             }
             else {
+                // Show error popup for employee login failures
                 state.isLoading = false;
                 state.error.status = true;
-                state.error.message = action.payload.message
+                state.error.message = action.payload.message || "An error occurred";
                 state.error.content = action.payload
             }
         });
@@ -48,12 +58,13 @@ export const HRAsyncReducer = (builder, thunk) => {
                 state.error.status = false;
                 state.data = action.payload;
             }
-            if ((action.payload.type == "checkHR") || (action.payload.type == "HRLogin") || (action.payload.type == "HRforgotpassword")) {
+            else if ((action.payload.type == "checkHR") || (action.payload.type == "HRLogin") || (action.payload.type == "HRforgotpassword")) {
                 state.isSignUp = true
                 state.isLoading = false;
                 state.isAuthenticated = true
                 state.isAuthourized = true
                 state.error.status = false;
+                state.error.message = null; // Clear any previous error messages
                 state.data = action.payload;
             }
             if (action.payload.type == "HRverifyemail") {
@@ -98,23 +109,39 @@ export const HRAsyncReducer = (builder, thunk) => {
             }
         })
         .addCase(thunk.rejected, (state, action) => {
+            // Ensure action.payload exists
+            if (!action.payload) {
+                state.isLoading = false;
+                state.error.status = true;
+                state.error.message = "An unexpected error occurred";
+                state.error.content = { message: "An unexpected error occurred" };
+                return;
+            }
+
             if (action.payload.type == "signup") {
                 state.isSignUp = false
                 state.isLoading = false;
                 state.error.status = true;
-                state.error.message = action.payload.message
+                state.error.message = action.payload.message || "Signup failed";
                 state.error.content = action.payload
             }
-            if (action.payload.type == "HRcodeavailable") {
-                // state.isSignUp = true
+            else if (action.payload.type == "HRcodeavailable") {
                 state.isLoading = false;
-                // state.isAuthenticated = true
                 state.isVerified = false
                 state.isVerifiedEmailAvailable = false
                 state.error.status = false;
                 state.error.content = action.payload
             }
-            if (action.payload.gologin) {
+            else if (action.payload.type == "HRLogin") {
+                // Handle HR login errors - show error popup
+                state.isSignUp = false
+                state.isLoading = false;
+                state.isAuthenticated = false
+                state.error.status = true; // Show error popup for login failures
+                state.error.message = action.payload.message || "Login failed";
+                state.error.content = action.payload
+            }
+            else if (action.payload.gologin) {
                 state.isSignUp = false
                 state.isLoading = false;
                 state.isAuthenticated = false
@@ -123,9 +150,10 @@ export const HRAsyncReducer = (builder, thunk) => {
                 state.error.content = action.payload
             }
             else {
+                // Default error handling - show error popup
                 state.isLoading = false;
                 state.error.status = true;
-                state.error.message = action.payload.message
+                state.error.message = action.payload.message || "An error occurred";
                 state.error.content = action.payload
             }
         });
