@@ -1,9 +1,9 @@
 import axios from 'axios';
 
-// Updated to use Heroku server URL
+// Use relative URLs in production (same domain) or localhost in development
 export const apiService = axios.create({
   baseURL: process.env.NODE_ENV === 'production' 
-    ? "https://hr-management-system-shawon-04fce1431e33.herokuapp.com" 
+    ? "" // Use relative URLs when frontend and backend are on same domain
     : "http://localhost:5000",
   headers: {
     'Content-Type': 'application/json',

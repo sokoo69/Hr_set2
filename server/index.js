@@ -44,7 +44,9 @@ app.use(cors({
     "http://localhost:5173", 
     "http://localhost:5174",
     "https://hr-set2-client.vercel.app",
-    "https://hr-set2-client-8wy89r5gg-shawons-projects-2380d384.vercel.app"
+    "https://hr-set2-client-8wy89r5gg-shawons-projects-2380d384.vercel.app",
+    "https://hr-set2-hltq2cm5q-shawons-projects-2380d384.vercel.app",
+    /\.vercel\.app$/, // Allow all Vercel preview deployments
   ], // Support multiple client ports and Vercel domains
   credentials: true, // This is optional and depends on whether you're using cookies
 }));
