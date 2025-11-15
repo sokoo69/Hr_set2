@@ -16,7 +16,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { FormSubmitToast } from "./Toasts.jsx"
 import { Loading } from "../loading.jsx"
 import { HandleDeleteHREmployees } from "../../../redux/Thunks/HREmployeesThunk.js"
-import { HandlePostHRDepartments, HandlePatchHRDepartments, HandleDeleteHRDepartments } from "../../../redux/Thunks/HRDepartmentPageThunk.js"
+import { HandlePostHRDepartments, HandlePatchHRDepartments, HandleDeleteHRDepartments, HandleGetHRDepartments } from "../../../redux/Thunks/HRDepartmentPageThunk.js"
 import { useToast } from "../../../hooks/use-toast.js"
 import {
     Command,
@@ -32,6 +32,10 @@ import { HandleGetAllEmployeesIDs } from "../../../redux/Thunks/EmployeesIDsThun
 import { HandleProcessPayroll, HandleGetAllSalaries } from "../../../redux/Thunks/SalaryThunk.js"
 import { HandleCreateLeave } from "../../../redux/Thunks/LeaveThunk.js"
 import { HandleCreateRequest } from "../../../redux/Thunks/RequestThunk.js"
+import { HandleCreateNotice, HandleGetAllNotices } from "../../../redux/Thunks/NoticeThunk.js"
+import { HandleGetHREmployees } from "../../../redux/Thunks/HREmployeesThunk.js"
+import { HandleInitializeAttendance } from "../../../redux/Thunks/AttendanceThunk.js"
+import { HandleCreateRecruitment } from "../../../redux/Thunks/RecruitmentThunk.js"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -40,6 +44,8 @@ import { Plus } from "lucide-react"
 
 export const AddEmployeesDialogBox = () => {
     const HREmployeesState = useSelector((state) => state.HREmployeesPageReducer)
+    const HRDepartmentState = useSelector((state) => state.HRDepartmentPageReducer)
+    const dispatch = useDispatch()
     const [formdata, setformdata] = useState({
         firstname: "",
         lastname: "",
@@ -47,7 +53,15 @@ export const AddEmployeesDialogBox = () => {
         contactnumber: "",
         textpassword: "",
         password: "",
+        departmentID: "",
     })
+
+    useEffect(() => {
+        // Fetch departments when dialog opens
+        if (HRDepartmentState.data && HRDepartmentState.data.length === 0) {
+            dispatch(HandleGetHRDepartments({ apiroute: "GETALL" }))
+        }
+    }, [])
 
     const handleformchange = (event) => {
         CommonStateHandler(formdata, setformdata, event)
@@ -115,6 +129,28 @@ export const AddEmployeesDialogBox = () => {
                                         name="password"
                                         value={formdata.password}
                                         onChange={handleformchange} />
+                                </div>
+                                <div className="label-input-field flex flex-col gap-1">
+                                    <label htmlFor="departmentID" className="md:text-md lg:text-lg font-bold">Department (Optional)</label>
+                                    <Select 
+                                        value={formdata.departmentID} 
+                                        onValueChange={(value) => setformdata({...formdata, departmentID: value})}
+                                    >
+                                        <SelectTrigger className="border-2 border-gray-700 rounded px-2 py-1">
+                                            <SelectValue placeholder="Select Department" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {HRDepartmentState.data && Array.isArray(HRDepartmentState.data) && HRDepartmentState.data.length > 0 ? (
+                                                HRDepartmentState.data.map((dept) => (
+                                                    <SelectItem key={dept._id} value={dept._id}>
+                                                        {dept.name}
+                                                    </SelectItem>
+                                                ))
+                                            ) : (
+                                                <SelectItem value="" disabled>No departments available</SelectItem>
+                                            )}
+                                        </SelectContent>
+                                    </Select>
                                 </div>
                             </div>
                         </div>
@@ -913,6 +949,541 @@ export const ProcessPayrollDialogBox = () => {
                         </Button>
                     </DialogFooter>
                 </form>
+            </DialogContent>
+        </Dialog>
+    )
+}
+
+// Create Notice Dialog Box
+export const CreateNoticeDialogBox = () => {
+    const dispatch = useDispatch()
+    const HRDepartmentState = useSelector((state) => state.HRDepartmentPageReducer)
+    const HREmployeesState = useSelector((state) => state.HREmployeesPageReducer)
+    const NoticesState = useSelector((state) => state.NoticesReducer)
+    const { toast } = useToast()
+    const [open, setOpen] = useState(false)
+    const [formdata, setformdata] = useState({
+        title: "",
+        content: "",
+        audience: "Department-Specific",
+        departmentID: "",
+        employeeID: ""
+    })
+
+    useEffect(() => {
+        // Fetch departments and employees when dialog opens
+        if (open) {
+            if (!HRDepartmentState.data || HRDepartmentState.data.length === 0) {
+                dispatch(HandleGetHRDepartments({ apiroute: "GETALL" }))
+            }
+            if (!HREmployeesState.data || HREmployeesState.data.length === 0) {
+                dispatch(HandleGetHREmployees({ apiroute: "GETALL" }))
+            }
+        }
+    }, [open, dispatch, HRDepartmentState.data, HREmployeesState.data])
+
+    useEffect(() => {
+        if (NoticesState.success && NoticesState.fetchData) {
+            setOpen(false)
+            setformdata({
+                title: "",
+                content: "",
+                audience: "Department-Specific",
+                departmentID: "",
+                employeeID: ""
+            })
+            toast({
+                title: "Success!",
+                description: "Notice created successfully",
+            })
+        }
+        if (NoticesState.error?.status && !NoticesState.isLoading) {
+            toast({
+                variant: "destructive",
+                title: "Error",
+                description: NoticesState.error?.message || "Failed to create notice",
+            })
+        }
+    }, [NoticesState.success, NoticesState.fetchData, NoticesState.error, NoticesState.isLoading, dispatch, toast])
+
+    const handleformchange = (event) => {
+        CommonStateHandler(formdata, setformdata, event)
+    }
+
+    const handlesubmit = async (event) => {
+        event.preventDefault()
+        
+        if (!formdata.title || !formdata.content || !formdata.audience) {
+            toast({
+                variant: "destructive",
+                title: "Error",
+                description: "Title, Content, and Audience are required",
+            })
+            return
+        }
+
+        if (formdata.audience === "Department-Specific" && !formdata.departmentID) {
+            toast({
+                variant: "destructive",
+                title: "Error",
+                description: "Please select a department",
+            })
+            return
+        }
+
+        if (formdata.audience === "Employee-Specific" && !formdata.employeeID) {
+            toast({
+                variant: "destructive",
+                title: "Error",
+                description: "Please select an employee",
+            })
+            return
+        }
+
+        try {
+            await dispatch(HandleCreateNotice(formdata)).unwrap()
+        } catch (error) {
+            console.error("Failed to create notice:", error)
+        }
+    }
+
+    return (
+        <div className="CreateNotice-content">
+            <Dialog open={open} onOpenChange={setOpen}>
+                <DialogTrigger asChild>
+                    <Button className="btn-sm btn-blue-700 text-md border-2 min-[250px]:px-2 min-[250px]:py-1 sm:px-1 sm:py-0.5 xl:px-2 xl:py-1 rounded-md bg-blue-700 border-blue-700 hover:bg-transparent hover:text-blue-700">
+                        Create Notice
+                    </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[500px]">
+                    <DialogHeader>
+                        <DialogTitle>Create New Notice</DialogTitle>
+                        <DialogDescription>
+                            Create a notice for departments or specific employees.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <form onSubmit={handlesubmit} className="space-y-4">
+                        <div className="grid gap-4 py-4">
+                            <div className="grid grid-cols-4 items-center gap-4">
+                                <Label htmlFor="title" className="text-right">
+                                    Title
+                                </Label>
+                                <Input
+                                    id="title"
+                                    name="title"
+                                    value={formdata.title}
+                                    onChange={handleformchange}
+                                    className="col-span-3"
+                                    required
+                                />
+                            </div>
+                            <div className="grid grid-cols-4 items-center gap-4">
+                                <Label htmlFor="content" className="text-right">
+                                    Content
+                                </Label>
+                                <textarea
+                                    id="content"
+                                    name="content"
+                                    value={formdata.content}
+                                    onChange={handleformchange}
+                                    className="col-span-3 border rounded-md px-3 py-2"
+                                    rows={4}
+                                    required
+                                />
+                            </div>
+                            <div className="grid grid-cols-4 items-center gap-4">
+                                <Label htmlFor="audience" className="text-right">
+                                    Audience
+                                </Label>
+                                <Select 
+                                    value={formdata.audience} 
+                                    onValueChange={(value) => setformdata({...formdata, audience: value, departmentID: "", employeeID: ""})}
+                                >
+                                    <SelectTrigger className="col-span-3">
+                                        <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="Department-Specific">Department Specific</SelectItem>
+                                        <SelectItem value="Employee-Specific">Employee Specific</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                            {formdata.audience === "Department-Specific" && (
+                                <div className="grid grid-cols-4 items-center gap-4">
+                                    <Label htmlFor="departmentID" className="text-right">
+                                        Department
+                                    </Label>
+                                    <Select 
+                                        value={formdata.departmentID} 
+                                        onValueChange={(value) => setformdata({...formdata, departmentID: value})}
+                                    >
+                                        <SelectTrigger className="col-span-3">
+                                            <SelectValue placeholder="Select Department" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {HRDepartmentState.data && Array.isArray(HRDepartmentState.data) && HRDepartmentState.data.length > 0 ? (
+                                                HRDepartmentState.data.map((dept) => (
+                                                    <SelectItem key={dept._id} value={dept._id}>
+                                                        {dept.name}
+                                                    </SelectItem>
+                                                ))
+                                            ) : (
+                                                <SelectItem value="" disabled>No departments available</SelectItem>
+                                            )}
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                            )}
+                            {formdata.audience === "Employee-Specific" && (
+                                <div className="grid grid-cols-4 items-center gap-4">
+                                    <Label htmlFor="employeeID" className="text-right">
+                                        Employee
+                                    </Label>
+                                    <Select 
+                                        value={formdata.employeeID} 
+                                        onValueChange={(value) => setformdata({...formdata, employeeID: value})}
+                                    >
+                                        <SelectTrigger className="col-span-3">
+                                            <SelectValue placeholder="Select Employee" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {HREmployeesState.data && Array.isArray(HREmployeesState.data) && HREmployeesState.data.length > 0 ? (
+                                                HREmployeesState.data.map((emp) => (
+                                                    <SelectItem key={emp._id} value={emp._id}>
+                                                        {emp.firstname} {emp.lastname} ({emp.email})
+                                                    </SelectItem>
+                                                ))
+                                            ) : (
+                                                <SelectItem value="" disabled>No employees available</SelectItem>
+                                            )}
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                            )}
+                        </div>
+                        <DialogFooter>
+                            <DialogClose asChild>
+                                <Button type="button" variant="outline">Cancel</Button>
+                            </DialogClose>
+                            <Button type="submit" disabled={NoticesState.isLoading}>
+                                {NoticesState.isLoading ? "Creating..." : "Create Notice"}
+                            </Button>
+                        </DialogFooter>
+                    </form>
+                </DialogContent>
+            </Dialog>
+        </div>
+    )
+}
+
+// Mark Attendance Dialog Box
+export const MarkAttendanceDialogBox = () => {
+    const dispatch = useDispatch()
+    const HREmployeesState = useSelector((state) => state.HREmployeesPageReducer)
+    const AttendancesState = useSelector((state) => state.AttendancesReducer)
+    const { toast } = useToast()
+    const [open, setOpen] = useState(false)
+    const [formdata, setformdata] = useState({
+        employeeID: ""
+    })
+
+    useEffect(() => {
+        if (open && (!HREmployeesState.data || HREmployeesState.data.length === 0)) {
+            dispatch(HandleGetHREmployees({ apiroute: "GETALL" }))
+        }
+    }, [open, dispatch, HREmployeesState.data])
+
+    useEffect(() => {
+        if (AttendancesState.fetchData) {
+            setOpen(false)
+            setformdata({ employeeID: "" })
+            toast({
+                title: "Success!",
+                description: "Attendance initialized successfully",
+            })
+        }
+        if (AttendancesState.error?.status && !AttendancesState.isLoading) {
+            toast({
+                variant: "destructive",
+                title: "Error",
+                description: AttendancesState.error?.message || "Failed to initialize attendance",
+            })
+        }
+    }, [AttendancesState.fetchData, AttendancesState.error, AttendancesState.isLoading, dispatch, toast])
+
+    const handlesubmit = async (event) => {
+        event.preventDefault()
+        
+        if (!formdata.employeeID) {
+            toast({
+                variant: "destructive",
+                title: "Error",
+                description: "Please select an employee",
+            })
+            return
+        }
+
+        try {
+            await dispatch(HandleInitializeAttendance(formdata)).unwrap()
+        } catch (error) {
+            console.error("Failed to initialize attendance:", error)
+        }
+    }
+
+    return (
+        <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild>
+                <Button className="btn-sm btn-blue-700 text-md border-2 min-[250px]:px-2 min-[250px]:py-1 sm:px-1 sm:py-0.5 xl:px-2 xl:py-1 rounded-md bg-blue-700 border-blue-700 hover:bg-transparent hover:text-blue-700">
+                    Mark Attendance
+                </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[500px]">
+                <DialogHeader>
+                    <DialogTitle>Initialize Attendance</DialogTitle>
+                    <DialogDescription>
+                        Select an employee to initialize their attendance log.
+                    </DialogDescription>
+                </DialogHeader>
+                <form onSubmit={handlesubmit} className="space-y-4">
+                    <div className="grid gap-4 py-4">
+                        <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="employeeID" className="text-right">
+                                Employee
+                            </Label>
+                            <Select 
+                                value={formdata.employeeID} 
+                                onValueChange={(value) => setformdata({...formdata, employeeID: value})}
+                            >
+                                <SelectTrigger className="col-span-3">
+                                    <SelectValue placeholder="Select Employee" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {HREmployeesState.data && Array.isArray(HREmployeesState.data) && HREmployeesState.data.length > 0 ? (
+                                        HREmployeesState.data.map((emp) => (
+                                            <SelectItem key={emp._id} value={emp._id}>
+                                                {emp.firstname} {emp.lastname} ({emp.email})
+                                            </SelectItem>
+                                        ))
+                                    ) : (
+                                        <SelectItem value="" disabled>No employees available</SelectItem>
+                                    )}
+                                </SelectContent>
+                            </Select>
+                        </div>
+                    </div>
+                    <DialogFooter>
+                        <DialogClose asChild>
+                            <Button type="button" variant="outline">Cancel</Button>
+                        </DialogClose>
+                        <Button type="submit" disabled={AttendancesState.isLoading}>
+                            {AttendancesState.isLoading ? "Initializing..." : "Initialize"}
+                        </Button>
+                    </DialogFooter>
+                </form>
+            </DialogContent>
+        </Dialog>
+    )
+}
+
+// Post Job Dialog Box
+export const PostJobDialogBox = () => {
+    const dispatch = useDispatch()
+    const RecruitmentState = useSelector((state) => state.RecruitmentReducer)
+    const { toast } = useToast()
+    const [open, setOpen] = useState(false)
+    const [formdata, setformdata] = useState({
+        jobtitle: "",
+        description: ""
+    })
+
+    useEffect(() => {
+        if (RecruitmentState.fetchData) {
+            setOpen(false)
+            setformdata({ jobtitle: "", description: "" })
+            toast({
+                title: "Success!",
+                description: "Job posted successfully",
+            })
+        }
+        if (RecruitmentState.error?.status && !RecruitmentState.isLoading) {
+            toast({
+                variant: "destructive",
+                title: "Error",
+                description: RecruitmentState.error?.message || "Failed to post job",
+            })
+        }
+    }, [RecruitmentState.fetchData, RecruitmentState.error, RecruitmentState.isLoading, dispatch, toast])
+
+    const handleformchange = (event) => {
+        CommonStateHandler(formdata, setformdata, event)
+    }
+
+    const handlesubmit = async (event) => {
+        event.preventDefault()
+        
+        if (!formdata.jobtitle || !formdata.description) {
+            toast({
+                variant: "destructive",
+                title: "Error",
+                description: "Job title and description are required",
+            })
+            return
+        }
+
+        try {
+            await dispatch(HandleCreateRecruitment(formdata)).unwrap()
+        } catch (error) {
+            console.error("Failed to post job:", error)
+        }
+    }
+
+    return (
+        <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild>
+                <Button className="btn-sm btn-blue-700 text-md border-2 min-[250px]:px-2 min-[250px]:py-1 sm:px-1 sm:py-0.5 xl:px-2 xl:py-1 rounded-md bg-blue-700 border-blue-700 hover:bg-transparent hover:text-blue-700">
+                    Post Job
+                </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[500px]">
+                <DialogHeader>
+                    <DialogTitle>Post New Job</DialogTitle>
+                    <DialogDescription>
+                        Create a new job posting for recruitment.
+                    </DialogDescription>
+                </DialogHeader>
+                <form onSubmit={handlesubmit} className="space-y-4">
+                    <div className="grid gap-4 py-4">
+                        <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="jobtitle" className="text-right">
+                                Job Title
+                            </Label>
+                            <Input
+                                id="jobtitle"
+                                name="jobtitle"
+                                value={formdata.jobtitle}
+                                onChange={handleformchange}
+                                className="col-span-3"
+                                required
+                            />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="description" className="text-right">
+                                Description
+                            </Label>
+                            <textarea
+                                id="description"
+                                name="description"
+                                value={formdata.description}
+                                onChange={handleformchange}
+                                className="col-span-3 border rounded-md px-3 py-2"
+                                rows={4}
+                                required
+                            />
+                        </div>
+                    </div>
+                    <DialogFooter>
+                        <DialogClose asChild>
+                            <Button type="button" variant="outline">Cancel</Button>
+                        </DialogClose>
+                        <Button type="submit" disabled={RecruitmentState.isLoading}>
+                            {RecruitmentState.isLoading ? "Posting..." : "Post Job"}
+                        </Button>
+                    </DialogFooter>
+                </form>
+            </DialogContent>
+        </Dialog>
+    )
+}
+
+// Generate Report Dialog Box
+export const GenerateReportDialogBox = () => {
+    const InterviewInsightsState = useSelector((state) => state.InterviewInsightsReducer)
+    const [open, setOpen] = useState(false)
+
+    const generateCSV = () => {
+        if (!InterviewInsightsState.data || InterviewInsightsState.data.length === 0) {
+            return
+        }
+
+        const headers = ["Candidate Name", "Position", "Interview Date", "Status", "Score", "Feedback"]
+        const rows = InterviewInsightsState.data.map(interview => [
+            `${interview.applicant?.firstname || ""} ${interview.applicant?.lastname || ""}`,
+            interview.applicant?.appliedrole || "N/A",
+            interview.interviewdate ? new Date(interview.interviewdate).toLocaleDateString() : "N/A",
+            interview.status || "Pending",
+            interview.score || "N/A",
+            interview.feedback || "No feedback"
+        ])
+
+        const csvContent = [
+            headers.join(","),
+            ...rows.map(row => row.map(cell => `"${cell}"`).join(","))
+        ].join("\n")
+
+        const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" })
+        const link = document.createElement("a")
+        const url = URL.createObjectURL(blob)
+        link.setAttribute("href", url)
+        link.setAttribute("download", `interview-report-${new Date().toISOString().split("T")[0]}.csv`)
+        link.style.visibility = "hidden"
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+    }
+
+    const totalInterviews = InterviewInsightsState.data?.length || 0
+    const pendingInterviews = InterviewInsightsState.data?.filter(i => i.status === "Pending" || !i.status).length || 0
+    const completedInterviews = InterviewInsightsState.data?.filter(i => i.status === "Completed").length || 0
+    const averageScore = InterviewInsightsState.data?.length > 0 
+        ? (InterviewInsightsState.data.reduce((sum, i) => sum + (parseFloat(i.score) || 0), 0) / InterviewInsightsState.data.length).toFixed(2)
+        : "N/A"
+
+    return (
+        <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild>
+                <Button className="btn-sm btn-blue-700 text-md border-2 min-[250px]:px-2 min-[250px]:py-1 sm:px-1 sm:py-0.5 xl:px-2 xl:py-1 rounded-md bg-blue-700 border-blue-700 hover:bg-transparent hover:text-blue-700">
+                    Generate Report
+                </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[500px]">
+                <DialogHeader>
+                    <DialogTitle>Interview Insights Report</DialogTitle>
+                    <DialogDescription>
+                        View interview statistics and download report.
+                    </DialogDescription>
+                </DialogHeader>
+                <div className="space-y-4 py-4">
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="p-4 border rounded-lg">
+                            <div className="text-sm text-gray-600">Total Interviews</div>
+                            <div className="text-2xl font-bold">{totalInterviews}</div>
+                        </div>
+                        <div className="p-4 border rounded-lg">
+                            <div className="text-sm text-gray-600">Pending</div>
+                            <div className="text-2xl font-bold">{pendingInterviews}</div>
+                        </div>
+                        <div className="p-4 border rounded-lg">
+                            <div className="text-sm text-gray-600">Completed</div>
+                            <div className="text-2xl font-bold">{completedInterviews}</div>
+                        </div>
+                        <div className="p-4 border rounded-lg">
+                            <div className="text-sm text-gray-600">Average Score</div>
+                            <div className="text-2xl font-bold">{averageScore}</div>
+                        </div>
+                    </div>
+                </div>
+                <DialogFooter>
+                    <DialogClose asChild>
+                        <Button type="button" variant="outline">Close</Button>
+                    </DialogClose>
+                    <Button 
+                        type="button" 
+                        onClick={generateCSV}
+                        disabled={!InterviewInsightsState.data || InterviewInsightsState.data.length === 0}
+                    >
+                        Download CSV
+                    </Button>
+                </DialogFooter>
             </DialogContent>
         </Dialog>
     )

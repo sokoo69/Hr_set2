@@ -52,6 +52,8 @@ export const HandleEmplyoeeSignup = async (req, res) => {
             const hashedPassword = await bcrypt.hash(password, 10)
             const verificationcode = GenerateVerificationToken(6)
 
+            const { departmentID } = req.body
+            
             const newEmployee = await Employee.create({
                 firstname: firstname,
                 lastname: lastname,
@@ -60,8 +62,19 @@ export const HandleEmplyoeeSignup = async (req, res) => {
                 contactnumber: contactnumber,
                 role: "Employee",
                 isverified: true, // Auto-verify without email
-                organizationID: organization._id
+                organizationID: organization._id,
+                department: departmentID || null
             })
+            
+            // If departmentID is provided, add employee to department
+            if (departmentID) {
+                const { Department } = await import("../models/Department.model.js")
+                const department = await Department.findById(departmentID)
+                if (department && department.organizationID.toString() === organization._id.toString()) {
+                    department.employees.push(newEmployee._id)
+                    await department.save()
+                }
+            }
 
             organization.employees.push(newEmployee._id)
             await organization.save()
@@ -191,7 +204,7 @@ export const HandleEmplyoeeLogout = async (req, res) => {
 export const HandleEmplyoeeForgotPassword = async (req, res) => {
     const { email } = req.body
     try {
-        const employee = await Employee.findOne({ email: email, organizationID: req.ORGID })
+        const employee = await Employee.findOne({ email: email.toLowerCase().trim() })
 
         if (!employee) {
             return res.status(401).json({ success: false, message: "Employee Email Does Not Exist, Please Enter Correct One" })

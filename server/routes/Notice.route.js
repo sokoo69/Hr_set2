@@ -8,7 +8,7 @@ const router = express.Router()
 
 router.post("/create-notice", VerifyhHRToken, RoleAuthorization("HR-Admin"), HandleCreateNotice)
 
-router.get("/all/", VerifyhHRToken, RoleAuthorization("HR-Admin"), HandleAllNotice)
+router.get("/all", VerifyhHRToken, RoleAuthorization("HR-Admin"), HandleAllNotice)
 
 router.get("/:noticeID", VerifyhHRToken, RoleAuthorization("HR-Admin"), HandleNotice)
 

@@ -67,6 +67,16 @@ export const HRAsyncReducer = (builder, thunk) => {
                 state.isVerifiedEmailAvailable = true
                 state.error.status = false;
                 state.data = action.payload;
+                // Persist to localStorage
+                try {
+                    localStorage.setItem('hrAuthState', JSON.stringify({
+                        data: action.payload,
+                        isAuthenticated: true,
+                        isAuthourized: true,
+                    }));
+                } catch (error) {
+                    console.error('Error persisting HR state:', error);
+                }
             }
             else if ((action.payload.type == "checkHR") || (action.payload.type == "HRLogin") || (action.payload.type == "HRforgotpassword")) {
                 state.isSignUp = true
@@ -76,6 +86,16 @@ export const HRAsyncReducer = (builder, thunk) => {
                 state.error.status = false;
                 state.error.message = null; // Clear any previous error messages
                 state.data = action.payload;
+                // Persist to localStorage
+                try {
+                    localStorage.setItem('hrAuthState', JSON.stringify({
+                        data: action.payload,
+                        isAuthenticated: true,
+                        isAuthourized: true,
+                    }));
+                } catch (error) {
+                    console.error('Error persisting HR state:', error);
+                }
             }
             if (action.payload.type == "HRverifyemail") {
                 state.isSignUp = true
@@ -86,11 +106,22 @@ export const HRAsyncReducer = (builder, thunk) => {
                 state.isVerified = true
                 state.error.status = false;
                 state.data = action.payload;
+                // Persist to localStorage
+                try {
+                    localStorage.setItem('hrAuthState', JSON.stringify({
+                        data: action.payload,
+                        isAuthenticated: true,
+                        isAuthourized: true,
+                    }));
+                } catch (error) {
+                    console.error('Error persisting HR state:', error);
+                }
             }
             if (action.payload.type == "HRcodeavailable") {
                 state.isSignUp = true
                 state.isLoading = false;
                 state.isAuthenticated = true
+                state.isAuthourized = true
                 if (action.payload.alreadyverified) {
                     state.isVerified = true
                 }
@@ -100,6 +131,16 @@ export const HRAsyncReducer = (builder, thunk) => {
                 state.isVerifiedEmailAvailable = true
                 state.error.status = false;
                 state.data = action.payload;
+                // Persist to localStorage
+                try {
+                    localStorage.setItem('hrAuthState', JSON.stringify({
+                        data: action.payload,
+                        isAuthenticated: true,
+                        isAuthourized: true,
+                    }));
+                } catch (error) {
+                    console.error('Error persisting HR state:', error);
+                }
             }
             if (action.payload.resetpassword) {
                 state.isSignUp = true
@@ -113,9 +154,20 @@ export const HRAsyncReducer = (builder, thunk) => {
                 state.isSignUp = true
                 state.isLoading = false;
                 state.isAuthenticated = true
+                state.isAuthourized = true
                 state.isVerifiedEmailAvailable = true
                 state.error.status = false;
                 state.data = action.payload;
+                // Persist to localStorage
+                try {
+                    localStorage.setItem('hrAuthState', JSON.stringify({
+                        data: action.payload,
+                        isAuthenticated: true,
+                        isAuthourized: true,
+                    }));
+                } catch (error) {
+                    console.error('Error persisting HR state:', error);
+                }
             }
         })
         .addCase(thunk.rejected, (state, action) => {
@@ -165,9 +217,16 @@ export const HRAsyncReducer = (builder, thunk) => {
                 state.isSignUp = false
                 state.isLoading = false;
                 state.isAuthenticated = false
+                state.isAuthourized = false
                 state.error.status = false;
                 state.error.message = action.payload.message || "Redirect to login";
                 state.error.content = action.payload
+                // Clear localStorage on unauthorized access
+                try {
+                    localStorage.removeItem('hrAuthState');
+                } catch (error) {
+                    console.error('Error clearing HR state:', error);
+                }
             }
             else {
                 // Default error handling - show error popup
@@ -198,8 +257,8 @@ export const HRDashboardAsyncReducer = (builder, thunk) => {
     builder.addCase(thunk.rejected, (state, action) => {
         state.isLoading = false;
         state.error.status = true;
-        state.error.message = action.payload.message
-        state.error.content = action.payload;
+        state.error.message = action.payload?.message || action.error?.message || "An error occurred";
+        state.error.content = action.payload || { message: state.error.message };
     })
 }
 
@@ -239,9 +298,9 @@ export const HREmployeesPageAsyncReducer = (builder, thunk) => {
         console.log(action)
         state.isLoading = false;
         state.error.status = true;
-        state.error.message = action.payload.message
-        state.success = action.payload.success;
-        state.error.content = action.payload;
+        state.error.message = action.payload?.message || action.error?.message || "An error occurred";
+        state.success = action.payload?.success || false;
+        state.error.content = action.payload || { message: state.error.message };
     })
 }
 
@@ -287,9 +346,9 @@ export const HRDepartmentPageAsyncReducer = (builder, thunk) => {
     builder.addCase(thunk.rejected, (state, action) => {
         state.isLoading = false;
         state.error.status = true;
-        state.error.message = action.payload.message
-        state.success = action.payload.success;
-        state.error.content = action.payload;
+        state.error.message = action.payload?.message || action.error?.message || "An error occurred";
+        state.success = action.payload?.success || false;
+        state.error.content = action.payload || { message: state.error.message };
     })
 }
 
@@ -309,7 +368,7 @@ export const EmployeesIDsAsyncReducer = (builder, thunk) => {
     builder.addCase(thunk.rejected, (state, action) => {
         state.isLoading = false;
         state.error.status = true;
-        state.error.message = action.payload.message
-        state.error.content = action.payload
+        state.error.message = action.payload?.message || action.error?.message || "An error occurred";
+        state.error.content = action.payload || { message: state.error.message };
     })
 }

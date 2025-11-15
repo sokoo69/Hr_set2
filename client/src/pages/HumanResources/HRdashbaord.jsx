@@ -22,6 +22,7 @@ export const HRDashboard = () => {
         // Clear authentication tokens
         document.cookie = "HRtoken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         localStorage.removeItem('HRtoken');
+        localStorage.removeItem('hrAuthState'); // Clear persisted auth state
         sessionStorage.removeItem('HRtoken');
         
         // Dispatch logout action to clear Redux state

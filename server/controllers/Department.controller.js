@@ -78,7 +78,8 @@ export const HandleAllDepartments = async (req, res) => {
 
         return res.status(200).json({ success: true, message: "All departments retrieved successfully", data: departments, type: "AllDepartments" })
     } catch (error) {
-        return res.status(500).json({ success: false, message: "Internal server error" })
+        console.error('Department Fetch Error:', error)
+        return res.status(500).json({ success: false, message: "Internal server error", error: error.message })
     }
 }
 

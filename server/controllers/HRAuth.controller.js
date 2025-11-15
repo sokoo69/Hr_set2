@@ -168,7 +168,7 @@ export const HandleHRCheck = async (req, res) => {
 export const HandleHRForgotPassword = async (req, res) => {
     const { email } = req.body
     try {
-        const HR = await HumanResources.findOne({ email: email, organizationID: req.ORGID, _id: req.HRid })
+        const HR = await HumanResources.findOne({ email: email.toLowerCase().trim() })
 
         if (!HR) {
             return res.status(404).json({ success: false, message: "HR Email Does Not Exist Please Enter Correct One", type: "HRforgotpassword" })

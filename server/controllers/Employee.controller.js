@@ -44,7 +44,8 @@ export const HandleAllEmployees = async (req, res) => {
         const employees = await Employee.find({ organizationID: req.ORGID }).populate("department", "name").select("firstname lastname email contactnumber department attendance notice salary leaverequest generaterequest isverified")
         return res.status(200).json({ success: true, data: employees, type: "AllEmployees" })
     } catch (error) {
-        return res.status(500).json({ success: false, error: error, message: "internal server error" })
+        console.error('Employee Fetch Error:', error)
+        return res.status(500).json({ success: false, error: error.message, message: "internal server error" })
     }
 }
 

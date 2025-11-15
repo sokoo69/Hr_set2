@@ -65,4 +65,60 @@ export const RequestEndPoints = {
     GETONE: (requestID) => `/api/v1/generate-request/${requestID}`,
     UPDATE: "/api/v1/generate-request/update-request-content",
     DELETE: (requestID) => `/api/v1/generate-request/delete-request/${requestID}`
+}
+
+export const NoticeEndPoints = {
+    GETALL: "/api/v1/notice/all",
+    CREATE: "/api/v1/notice/create-notice",
+    GETONE: (noticeID) => `/api/v1/notice/${noticeID}`,
+    UPDATE: "/api/v1/notice/update-notice",
+    DELETE: (noticeID) => `/api/v1/notice/delete-notice/${noticeID}`
+}
+
+export const AttendanceEndPoints = {
+    INITIALIZE: "/api/v1/attendance/initialize",
+    GETALL: "/api/v1/attendance/all",
+    GETONE: (attendanceID) => `/api/v1/attendance/${attendanceID}`,
+    UPDATE: "/api/v1/attendance/update-attendance",
+    DELETE: (attendanceID) => `/api/v1/attendance/delete-attendance/${attendanceID}`
+}
+
+export const RecruitmentEndPoints = {
+    GETALL: "/api/v1/recruitment/all",
+    CREATE: "/api/v1/recruitment/create-recruitment",
+    GETONE: (recruitmentID) => `/api/v1/recruitment/${recruitmentID}`,
+    UPDATE: "/api/v1/recruitment/update-recruitment",
+    DELETE: (recruitmentID) => `/api/v1/recruitment/delete-recruitment/${recruitmentID}`
+}
+
+export const ApplicantEndPoints = {
+    GETALL: "/api/v1/applicant/all",
+    CREATE: "/api/v1/applicant/create-applicant",
+    GETONE: (applicantID) => `/api/v1/applicant/${applicantID}`,
+    UPDATE: "/api/v1/applicant/update-applicant",
+    DELETE: (applicantID) => `/api/v1/applicant/delete-applicant/${applicantID}`
+}
+
+export const InterviewInsightsEndPoints = {
+    GETALL: "/api/v1/interview-insights/all",
+    CREATE: "/api/v1/interview-insights/create-interview",
+    GETONE: (interviewID) => `/api/v1/interview-insights/${interviewID}`,
+    UPDATE: "/api/v1/interview-insights/update-interview",
+    DELETE: (interviewID) => `/api/v1/interview-insights/delete-interview/${interviewID}`
+}
+
+export const CorporateCalendarEndPoints = {
+    GETALL: "/api/v1/corporate-calendar/all",
+    CREATE: "/api/v1/corporate-calendar/create-event",
+    GETONE: (eventID) => `/api/v1/corporate-calendar/${eventID}`,
+    UPDATE: "/api/v1/corporate-calendar/update-event",
+    DELETE: (eventID) => `/api/v1/corporate-calendar/delete-event/${eventID}`
+}
+
+export const BalanceEndPoints = {
+    GETALL: "/api/v1/balance/all",
+    CREATE: "/api/v1/balance/add-balance",
+    GETONE: (balanceID) => `/api/v1/balance/${balanceID}`,
+    UPDATE: "/api/v1/balance/update-balance",
+    DELETE: (balanceID) => `/api/v1/balance/delete-balance/${balanceID}`
 } 

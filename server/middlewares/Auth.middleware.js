@@ -6,7 +6,14 @@ export const VerifyEmployeeToken = (req, res, next) => {
         return res.status(401).json({ success: false, message: "Unauthorized access", gologin : true })
     }
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET) 
+        // Use JWT_SECRET_EMPLOYEE if available, otherwise fall back to JWT_SECRET
+        const secret = process.env.JWT_SECRET_EMPLOYEE || process.env.JWT_SECRET
+        if (!secret) {
+            console.error('JWT_SECRET or JWT_SECRET_EMPLOYEE not configured')
+            return res.status(500).json({ success: false, message: "Server configuration error" })
+        }
+        
+        const decoded = jwt.verify(token, secret) 
         if (!decoded) {
             res.clearCookie("EMtoken")
             return res.status(403).json({ success: false, message: "unauthenticated employee", gologin : true }) 
@@ -16,7 +23,12 @@ export const VerifyEmployeeToken = (req, res, next) => {
         req.ORGID = decoded.ORGID
         next()
     } catch (error) {
-        return res.status(500).json({ success: false, message: "internal server error", error: error }) 
+        console.error('Employee Token Verification Error:', error.message)
+        if (error.name === 'JsonWebTokenError' || error.name === 'TokenExpiredError') {
+            res.clearCookie("EMtoken")
+            return res.status(401).json({ success: false, message: "Unauthorized access", gologin : true })
+        }
+        return res.status(500).json({ success: false, message: "internal server error", error: error.message }) 
     }
 }
 
@@ -35,7 +47,14 @@ export const VerifyhHRToken = (req, res, next) => {
     }
     
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET) 
+        // Use JWT_SECRET_HR if available, otherwise fall back to JWT_SECRET
+        const secret = process.env.JWT_SECRET_HR || process.env.JWT_SECRET
+        if (!secret) {
+            console.error('JWT_SECRET or JWT_SECRET_HR not configured')
+            return res.status(500).json({ success: false, message: "Server configuration error" })
+        }
+        
+        const decoded = jwt.verify(token, secret) 
         if (!decoded) {
             res.clearCookie("HRtoken")
             return res.status(403).json({ success: false, message: "unauthenticated employee", gologin : true })
@@ -45,6 +64,11 @@ export const VerifyhHRToken = (req, res, next) => {
         req.Role = decoded.HRrole
         next()
     } catch (error) {
-        return res.status(500).json({ success: false, message: "internal server error", error: error }) 
+        console.error('HR Token Verification Error:', error.message)
+        if (error.name === 'JsonWebTokenError' || error.name === 'TokenExpiredError') {
+            res.clearCookie("HRtoken")
+            return res.status(401).json({ success: false, message: "Unauthorized access", gologin : true })
+        }
+        return res.status(500).json({ success: false, message: "internal server error", error: error.message }) 
     }
 }

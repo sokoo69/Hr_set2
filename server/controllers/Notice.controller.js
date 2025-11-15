@@ -5,12 +5,13 @@ import { Notice } from "../models/Notice.model.js"
 
 export const HandleCreateNotice = async (req, res) => {
     try {
-        const { title, content, audience, departmentID, employeeID, HRID } = req.body
+        const { title, content, audience, departmentID, employeeID } = req.body
+        const HRID = req.HRid // Get HR ID from authenticated request
 
         if (audience === "Department-Specific") {
 
             if (!title || !content || !audience || !departmentID || !HRID) {
-                return res.status(404).json({ success: false, message: "All fields must be provided" })
+                return res.status(400).json({ success: false, message: "All fields must be provided" })
             }
 
             const department = await Department.findById(departmentID)
@@ -48,7 +49,7 @@ export const HandleCreateNotice = async (req, res) => {
 
         if (audience === "Employee-Specific") {
             if (!title || !content || !audience || !employeeID || !HRID) {
-                return res.status(404).json({ success: false, message: "All fields must be provided" })
+                return res.status(400).json({ success: false, message: "All fields must be provided" })
             }
 
             const employee = await Employee.findById(employeeID)
@@ -84,9 +85,13 @@ export const HandleCreateNotice = async (req, res) => {
             return res.status(200).json({ success: true, message: "Specific Notice Created Successfully", data: notice })
         }
 
+        // If audience is not recognized
+        return res.status(400).json({ success: false, message: "Invalid audience type. Must be 'Department-Specific' or 'Employee-Specific'" })
+
     }
     catch (error) {
-        return res.status(500).json({ success: false, message: "Internal Server Error", error: error })
+        console.error('Notice Creation Error:', error)
+        return res.status(500).json({ success: false, message: "Internal Server Error", error: error.message })
     }
 }
 

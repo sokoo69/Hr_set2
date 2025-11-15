@@ -22,6 +22,7 @@ import BalanceRouter from './routes/Balance.route.js'
 import { ConnectDB } from './config/connectDB.js';
 import cookieParser from 'cookie-parser';
 import cors from "cors"
+import mongoose from 'mongoose';
 
 
 dotenv.config()
@@ -32,10 +33,16 @@ let dbConnected = false;
 const connectDatabase = async () => {
   if (!dbConnected) {
     try {
+      if (mongoose.connection.readyState === 1) {
+        dbConnected = true;
+        return;
+      }
       await ConnectDB();
       dbConnected = true;
+      console.log('Database connection established successfully');
     } catch (error) {
       console.error('Database connection error:', error.message);
+      dbConnected = false;
       // Don't exit in serverless - let requests handle the error
     }
   }
@@ -110,12 +117,14 @@ app.use(async (req, res, next) => {
 });
 
 // Health check endpoint
-app.get("/api/health", (req, res) => {
+app.get("/api/health", async (req, res) => {
+  const dbStatus = mongoose.connection.readyState === 1 ? "connected" : "not connected";
   res.status(200).json({ 
     success: true, 
     message: "Server is running", 
     timestamp: new Date().toISOString(),
-    database: dbConnected ? "connected" : "not connected"
+    database: dbStatus,
+    dbState: mongoose.connection.readyState // 0 = disconnected, 1 = connected, 2 = connecting, 3 = disconnecting
   });
 });
 
